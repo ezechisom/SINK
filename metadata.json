@@ -1,0 +1,6 @@
+{
+  "name": "Moonlight Crescent - Smart Piano Kitchen Sink",
+  "description": "Nigeria's premier luxury smart piano kitchen sink with waterfall faucet, digital temperature display, and multi-functional workstation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

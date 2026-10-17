@@ -1,0 +1,256 @@
+{
+  "adminPassword": "moonlight2026",
+  "settings": {
+    "storeName": "Smart Kitchen Store",
+    "productName": "Smart Kitchen Piano Sink (75 × 45 cm)",
+    "headline": "UPGRADE YOUR KITCHEN WITH THE PREMIUM SMART PIANO SINK",
+    "subheading": "Experience a smarter, more elegant kitchen with a beautifully designed multifunctional workstation sink that combines modern style with everyday convenience.",
+    "sellingPrice": 135000,
+    "whatsappNumber": "+2349136827730",
+    "supportPhone": "09136827730",
+    "supportEmail": "orders@smartkitchensink.ng",
+    "pickupOfficeAddress": "Plot 14 Admiralty Way, Lekki Phase 1, Lagos, Nigeria",
+    "videoEmbedUrl": "",
+    "videoTitle": "Smart Piano Kitchen Sink Operational Showcase",
+    "videoDescription": "Watch the 4-mode piano keys, flying rain waterfall flow, high-pressure glass rinser, and hydroelectric LED temperature display in action.",
+    "pixels": {
+      "metaPixelId": "947636671276929",
+      "tikTokPixelId": "DB2I7I3C77UA626EHF30",
+      "googleAnalyticsId": ""
+    },
+    "policyText": {
+      "privacyPolicy": "At Smart Kitchen Store, customer privacy is paramount. We only collect details necessary for processing your order and fulfilling delivery within Nigeria.",
+      "termsAndConditions": "All orders placed are confirmed via call or WhatsApp before dispatch. Payment on delivery is available in eligible zones upon package inspection.",
+      "returnsPolicy": "7-day inspection and exchange period upon delivery. Items must remain unused in original protective packaging. Includes 1-Year Manufacturer Warranty.",
+      "faqText": [
+        {
+          "question": "1. What is the Smart Kitchen Piano Sink (75 × 45 cm)?",
+          "answer": "It is a premium multifunctional culinary workstation featuring 4 tactile piano keys for water modes, flying rain waterfall spout, high-pressure glass rinser, internal hydroelectric LED temperature screen, and sliding cutting board ledges."
+        },
+        {
+          "question": "2. How does the digital temperature display work without batteries?",
+          "answer": "The LED display and ambient glow are powered 100% by internal hydroelectric water hydraulics. As water flows through the faucet, it generates power automatically. Zero batteries, wiring, or electrical connections required."
+        },
+        {
+          "question": "3. What dimensions and countertop cutout are required?",
+          "answer": "The sink measures 750 mm × 450 mm (75 × 45 cm) with a generous 205 mm deep basin. It fits standard Nigerian 700 × 400 mm countertop cutouts and supports topmount (drop-in), undermount, or flushmount installation."
+        },
+        {
+          "question": "4. What is included in the complete box package?",
+          "answer": "Every package contains the SUS304 Nano Piano Sink basin, Integrated Waterfall Faucet Tower with 360° pull-out sprayer, Solid Wood Chopping Board, Stainless Steel Perforated Washing Colander, Triangular Prep Basin, Automatic Glass Rinser, Soap Dispenser, and heavy-duty anti-odor drainage pipe assembly with standard 1/2\" flexible hoses."
+        },
+        {
+          "question": "5. How does delivery work across Nigeria?",
+          "answer": "We deliver nationwide across all 36 states and the FCT. For Lagos State, doorstep delivery is ₦5,000 and takes 1–2 business days. For other states, delivery takes 3–5 business days to your major commercial park terminal or direct doorstep."
+        },
+        {
+          "question": "6. Which payment methods are available?",
+          "answer": "We support Payment on Delivery (Cash or Bank Transfer upon inspecting the sink) across major cities in Nigeria."
+        },
+        {
+          "question": "7. How do I contact customer support or confirm via WhatsApp?",
+          "answer": "Once you submit your order form, you can immediately confirm with your unique order reference directly on WhatsApp with one click, or call our desk at 09136827730."
+        }
+      ]
+    }
+  },
+  "deliveryFees": {
+    "Lagos": 5000,
+    "Ogun": 6500,
+    "Oyo": 7000,
+    "Ondo": 7500,
+    "Osun": 7500,
+    "Ekiti": 8000,
+    "Federal Capital Territory (Abuja)": 8000,
+    "Rivers": 8500,
+    "Delta": 8500,
+    "Edo": 8000,
+    "Anambra": 8500,
+    "Enugu": 8500,
+    "Imo": 8500,
+    "Abia": 8500,
+    "Akwa Ibom": 9000,
+    "Cross River": 9000,
+    "Bayelsa": 9000,
+    "Ebonyi": 9000,
+    "Kano": 10000,
+    "Kaduna": 9500,
+    "Kwara": 8000,
+    "Kogi": 8500,
+    "Niger": 9000,
+    "Plateau": 9500,
+    "Nasarawa": 9000,
+    "Benue": 9500,
+    "Bauchi": 11000,
+    "Gombe": 11000,
+    "Adamawa": 12000,
+    "Taraba": 12000,
+    "Borno": 13000,
+    "Yobe": 13000,
+    "Jigawa": 11000,
+    "Katsina": 11000,
+    "Kebbi": 12000,
+    "Sokoto": 12000,
+    "Zamfara": 12000
+  },
+  "specifications": [
+    {
+      "label": "Outer Dimensions",
+      "value": "750 mm (L) × 450 mm (W) × 205 mm (Basin Depth) [75 × 45 cm]"
+    },
+    {
+      "label": "Countertop Cutout",
+      "value": "700 × 400 mm (Fits standard 750 × 450 mm counter fit)"
+    },
+    {
+      "label": "Material & Construction",
+      "value": "Commercial SUS304 Honeycomb Nano Anti-Scratch Stainless Steel"
+    },
+    {
+      "label": "Surface Finish",
+      "value": "High-Density Nano PVD Titanium Grey (Oil & Scratch Resistant)"
+    },
+    {
+      "label": "Water Controls (4 Piano Keys)",
+      "value": "Flying Rain Waterfall, 360° Pull-Out Sprayer, Glass Rinser, Drinking Tap"
+    },
+    {
+      "label": "LED Temperature Console",
+      "value": "Hydroelectric Self-Powered Display (°C) & Ambient Flow Glow"
+    },
+    {
+      "label": "Automatic Glass Rinser",
+      "value": "5-Jet Inverted High-Pressure Cup Washer (Cleans in 2 Seconds)"
+    },
+    {
+      "label": "Workstation Ledge System",
+      "value": "Double-Track Sliding Ledges for Chopping Board & Colander"
+    },
+    {
+      "label": "Plumbing & Fittings",
+      "value": "Standard Nigerian 1/2\" Hot & Cold Inlets + Anti-Odor Siphon Trap"
+    },
+    {
+      "label": "Warranty & Guarantee",
+      "value": "1-Year Manufacturer Warranty + 7-Day Inspection/Exchange Period"
+    }
+  ],
+  "includedItems": [
+    "Smart Piano Workstation Basin (750 × 450 mm)",
+    "Waterfall & 3-Mode Pull-Out Spray Faucet Tower",
+    "Custom Solid Walnut Prep Cutting Board",
+    "Stainless Steel Perforated Washing Colander",
+    "Inner Triangular Prep Washing Basin",
+    "High-Pressure Glass Cup Rinser & Connector",
+    "Matte Finish Soap Dispenser",
+    "Complete Multi-Layer Anti-Odor Drainage Waste Pipe Set",
+    "Hot & Cold Stainless Steel Flexible Braided Hoses"
+  ],
+  "galleryImages": [
+    {
+      "id": "img-hero-installation",
+      "url": "/images/H360739baac2a4cf88fc2046698612fb1a.jpg",
+      "title": "Luxury Kitchen Island Installation",
+      "subtitle": "Integrated SUS304 smart sink with dual waterfall and real-time digital temperature display"
+    },
+    {
+      "id": "img-piano-keys-modes",
+      "url": "/images/H7cd8196bf11145a98421bf3effdabdf9r.jpg",
+      "title": "Tactile Piano Keys & 4 Water Modes",
+      "subtitle": "Tap water outlet, flying rain, cascading waterfall, and high-pressure cup washer"
+    },
+    {
+      "id": "img-dimensions-blueprint",
+      "url": "/images/H3c4573d0554c4af38cc585c26b09e3e8z.jpg",
+      "title": "Technical Dimensions & Cutout Blueprint",
+      "subtitle": "Standard 750 × 450 mm sink with 205 mm deep basin for standard 700 × 400 mm countertop cutout"
+    },
+    {
+      "id": "img-flying-rain-waterfall",
+      "url": "/images/Hd85d44aecd9c4c648346996b0540cbd69.jpg",
+      "title": "Flying Rain Waterfall Flow",
+      "subtitle": "Gentle rainfall cascade across the perforated stainless steel washing colander"
+    },
+    {
+      "id": "img-pullout-sprayer",
+      "url": "/images/Hbfbca46f9fec49179449b17fec40bc4ey.jpg",
+      "title": "360° Pull-Out Sprayer Faucet",
+      "subtitle": "Flexible pull-out spray head reaching all sink corners with multiple spray patterns"
+    },
+    {
+      "id": "img-plate-washing",
+      "url": "/images/Hd1946b3f5dba430aba7b4b0ecb381f0d1.jpg",
+      "title": "High-Flow Waterfall Plate Washing",
+      "subtitle": "Wide sheet water flow for rapid dish cleaning and vegetable preparation"
+    },
+    {
+      "id": "img-honeycomb-surface",
+      "url": "/images/H29dff7a62abd4a2fa499cb2b7c22bd73i.jpg",
+      "title": "Honeycomb Anti-Scratch Nano Surface",
+      "subtitle": "High-tensile SUS304 steel with embossed hexagonal nano-pattern resisting scratches and grease"
+    },
+    {
+      "id": "img-real-unboxing-box",
+      "url": "/images/H25a587f0b5d442b5aed842726533b1296_1.png",
+      "title": "Real Factory Unboxing Package",
+      "subtitle": "Actual boxed unit with solid wood chopping board, drainage pipes, basins, and protective foam"
+    },
+    {
+      "id": "img-package-components-grid",
+      "url": "/images/H94af9dd4bf0b4dcdaa5f60afba5a6c56x.png",
+      "title": "Complete Box Component Checklist",
+      "subtitle": "Includes sink, flying rain faucet, basin-in-basin, chopping board, basket, valves, and sewer pipe"
+    },
+    {
+      "id": "img-showroom-counter",
+      "url": "/images/H25af698200be4abd9392342c5f411ad5k.jpg",
+      "title": "Real Showroom Countertop Unit",
+      "subtitle": "Double sliding track ledges fitted with perforated colander and cutting board"
+    },
+    {
+      "id": "img-detached-console-bar",
+      "url": "/images/H1591db5734b3464b8000d90f72ddd4fcb.jpg",
+      "title": "Basin & Modular Faucet Console Bar",
+      "subtitle": "Precision engineered mounting holes for faucet tower, soap dispenser, and cup washer"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev-1",
+      "name": "Arc. Emeka Okafor",
+      "location": "Lekki Phase 1, Lagos",
+      "rating": 5,
+      "date": "2026-09-28",
+      "comment": "Installed this in our newly remodeled kitchen in Lekki. The waterfall faucet and the piano switch keys feel like a million bucks. Water pressure from the glass rinser is fantastic and the nano finish cleans easily.",
+      "verified": true
+    },
+    {
+      "id": "rev-2",
+      "name": "Hajiya Aisha Mohammed",
+      "location": "Gwarinpa Estate, Abuja",
+      "rating": 5,
+      "date": "2026-10-02",
+      "comment": "Delivered promptly to Abuja within 3 days. Our plumber had zero issues with the standard fittings. The digital temperature display helps so much when preparing hot water for baby bottles and rinsing oily pots.",
+      "verified": true
+    },
+    {
+      "id": "rev-3",
+      "name": "Engr. Tunde Adeleke",
+      "location": "Ikeja GRA, Lagos",
+      "rating": 5,
+      "date": "2026-10-09",
+      "comment": "Very thick and solid 304 stainless steel. The wooden cutting board and colander fit right onto the inner tracks, turning the sink into a full prep station. Worth every kobo of the ₦135,000.",
+      "verified": true
+    },
+    {
+      "id": "rev-4",
+      "name": "Dr. (Mrs) Nkechi Wilcox",
+      "location": "Old GRA, Port Harcourt",
+      "rating": 5,
+      "date": "2026-10-12",
+      "comment": "Ordered 2 units for our duplex in Port Harcourt. Excellent communication from the Moonlight Crescent team and the piano keys have such a smooth, high-grade mechanical feel.",
+      "verified": true
+    }
+  ],
+  "orders": []
+}
