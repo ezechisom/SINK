@@ -29,7 +29,7 @@ export const FaqAndTrust: React.FC<FaqAndTrustProps> = ({ settings }) => {
             FREQUENTLY ASKED QUESTIONS
           </h2>
           <p className="mt-2 text-sm sm:text-base text-slate-600">
-            Everything you need to know about purchasing, inspecting, delivering, and installing your sink in Nigeria.
+            Everything you need to know about purchasing, inspecting, delivering, and installing your A-01 Smart Lock in Nigeria.
           </p>
         </div>
 

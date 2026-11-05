@@ -13,7 +13,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ whatsappNumb
   const cleanNumber = whatsappNumber.replace(/[^0-9]/g, '');
 
   const prefilledMessage = encodeURIComponent(
-    `Hello, I'm interested in ordering the Premium Smart Piano Kitchen Sink priced at ₦${price.toLocaleString()}. Please provide more details.`
+    `Hello, I'm interested in ordering the A-01 Deadbolt Type Smart Lock priced at ₦${price.toLocaleString()}. Please provide more details.`
   );
 
   const whatsappUrl = `https://wa.me/${cleanNumber}?text=${prefilledMessage}`;

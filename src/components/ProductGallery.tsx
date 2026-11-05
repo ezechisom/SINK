@@ -24,16 +24,16 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
     <section id="gallery" className="py-16 sm:py-24 bg-slate-50 border-b border-blue-100 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-xs font-bold text-blue-700 uppercase tracking-widest mb-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-xs font-bold text-blue-800 uppercase tracking-widest mb-3">
             <span>High-Definition Photography</span>
-            <span aria-hidden="true" className="text-blue-300">·</span>
-            <span>75 × 45 cm Standard Fit</span>
+            <span aria-hidden="true" className="text-blue-400">·</span>
+            <span>A-01 Official Gallery</span>
           </div>
           <h2 className="font-['Outfit'] text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
             High-Definition Product Showcase
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-600">
-            Inspect every angle: the 4 piano water keys, internal hydroelectric LED display, flying rain dual waterfall, and complete multi-level workstation accessories.
+            Inspect the high-precision 3D face recognition infrared camera, 4.0-inch interior HD color screen, 0.3s semiconductor fingerprint scanner, anti-lock knob, and heavy-duty deadbolt body.
           </p>
         </div>
 
@@ -130,11 +130,11 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
             {/* In-box accessories badge */}
             <div className="mt-4 p-5 rounded-2xl bg-white border border-blue-200 shadow-sm text-left">
               <div className="flex items-center gap-2 text-xs font-bold text-blue-700 mb-1.5">
-                <Sparkles className="w-4 h-4 text-blue-600" />
-                <span>Complete Workstation Kit Included</span>
+                <Sparkles className="w-4 h-4 text-emerald-600" />
+                <span>Complete Lockset Hardware Included</span>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Every unit arrives complete with the solid wood cutting board, stainless colander, triangular prep basin, high-pressure glass rinser, and all standard Nigerian 1/2" plumbing drain fittings.
+                Every box arrives complete with the front & rear smart panels, stainless steel deadbolt mortise, high-capacity rechargeable battery, 2x encrypted IC cards, 2x emergency override keys, Type-C charging cable, and mounting template.
               </p>
             </div>
           </div>

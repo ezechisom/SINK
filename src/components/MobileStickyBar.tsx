@@ -14,7 +14,7 @@ export const MobileStickyBar: React.FC<MobileStickyBarProps> = ({ price, onOrder
         className="action-glow w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-600 active:from-blue-700 active:to-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider shadow-xl active:scale-[0.98] transition-all cursor-pointer"
       >
         <ShoppingBag className="w-4 h-4 text-white" />
-        <span>ORDER NOW — ₦{price.toLocaleString()}</span>
+        <span>ORDER NOW — NATIONWIDE DELIVERY</span>
       </button>
     </div>
   );

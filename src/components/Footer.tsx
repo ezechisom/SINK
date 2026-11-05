@@ -15,18 +15,18 @@ export const Footer: React.FC<FooterProps> = ({ settings, onAdminClick }) => {
           {/* Brand info */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
-                <Waves className="w-5 h-5 text-white" />
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-emerald-600 text-white flex items-center justify-center font-bold">
+                <Lock className="w-5 h-5 text-white" />
               </div>
               <span className="font-['Outfit'] font-extrabold text-lg text-white">
-                Smart Piano Sink
+                A-01 Deadbolt Smart Lock
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed">
-              Nigeria's premier supplier of modern multifunctional smart kitchen sinks. Certified high-grade SUS304 honeycomb nano stainless steel with nationwide delivery and payment on delivery options.
+              Nigeria's premier supplier of advanced smart door locks. High-grade aerospace alloy with 3D face recognition, 4.0-inch interior screen, Tuya App, and payment on delivery across Nigeria.
             </p>
             <div className="pt-2 text-xs text-slate-500">
-              © {new Date().getFullYear()} Smart Kitchen Workstation Nigeria. All rights reserved.
+              © {new Date().getFullYear()} Moonlight Crescent Smart Security. All rights reserved.
             </div>
           </div>
 
@@ -37,12 +37,14 @@ export const Footer: React.FC<FooterProps> = ({ settings, onAdminClick }) => {
             </h4>
             <div className="space-y-3 text-xs">
               <div className="flex items-center gap-2 text-slate-300">
-                <Phone className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                <span>{settings.supportPhone || '09136827730'}</span>
+                <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <a href={`tel:${settings.supportPhone || '08147778029'}`} className="hover:text-emerald-300 font-semibold">
+                  {settings.supportPhone || '08147778029'}
+                </a>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                <span>{settings.supportEmail || 'orders@smartkitchensink.ng'}</span>
+                <span>{settings.supportEmail || 'orders@smartlock.ng'}</span>
               </div>
               <div className="flex items-start gap-2 text-slate-300">
                 <MapPin className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />

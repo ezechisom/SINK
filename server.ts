@@ -329,21 +329,50 @@ app.post('/api/orders', (req, res) => {
     whatsapp,
     state,
     city,
+    deliveryMethod,
+    motorParkLocation,
     deliveryAddress,
     quantity,
     notes
   } = req.body;
 
-  if (!fullName || !phone || !state || !city || !deliveryAddress) {
-    return res.status(400).json({ error: 'Please provide all required delivery details' });
+  const isMotorPark = deliveryMethod === 'Motor Park Delivery';
+  const effectiveAddress = isMotorPark
+    ? (deliveryAddress && deliveryAddress.trim().length > 0
+        ? deliveryAddress.trim()
+        : motorParkLocation
+        ? `${motorParkLocation} Motor Park Terminal, ${state}`
+        : `Central Commercial Motor Park Terminal, ${state}`)
+    : (deliveryAddress ? deliveryAddress.trim() : '');
+
+  if (!fullName || !phone || !state) {
+    return res.status(400).json({ error: 'Please provide all required delivery details (Name, Phone, State)' });
+  }
+
+  if (!isMotorPark && !effectiveAddress) {
+    return res.status(400).json({ error: 'Please provide your doorstep delivery address' });
   }
 
   const parsedQty = Math.max(1, parseInt(quantity, 10) || 1);
   const db = readDb();
-  const unitPrice = db.settings.sellingPrice || 135000;
+  const unitPrice = db.settings.sellingPrice || 180000;
   const subtotal = unitPrice * parsedQty;
-  const deliveryFee = db.deliveryFees[state] ?? null;
-  const total = subtotal + (deliveryFee ?? 0);
+
+  // User request: "THE DISCOUNT FOR MULTIPLE ITEM IS 5K NOT 15K"
+  let discount = 0;
+  if (parsedQty > 1) {
+    discount = (parsedQty - 1) * 5000;
+  }
+
+  // User request: Base state delivery removed (FREE nationwide!)
+  const baseDeliveryFee = 0;
+
+  // User request: Extra 5k for home delivery is NOT applicable to Lagos
+  const isLagos = (state || '').trim().toLowerCase().includes('lagos');
+  const isDoorstep = deliveryMethod === 'Doorstep Delivery';
+  const doorstepFee = isDoorstep ? (isLagos ? 0 : 5000) : 0;
+  const totalDeliveryFee = doorstepFee;
+  const total = subtotal - discount + totalDeliveryFee;
 
   // Generate unique order reference (e.g. MC-26941)
   const randomSuffix = Math.floor(10000 + Math.random() * 90000);
@@ -356,12 +385,16 @@ app.post('/api/orders', (req, res) => {
     phone: phone.trim(),
     whatsapp: (whatsapp || phone).trim(),
     state: state.trim(),
-    city: city.trim(),
-    deliveryAddress: deliveryAddress.trim(),
+    city: (city || state).trim(),
+    deliveryMethod: deliveryMethod || 'Motor Park Delivery',
+    motorParkLocation: motorParkLocation ? motorParkLocation.trim() : undefined,
+    doorstepFee,
+    deliveryAddress: effectiveAddress,
     quantity: parsedQty,
     unitPrice,
     subtotal,
-    deliveryFee,
+    discount,
+    deliveryFee: totalDeliveryFee,
     total,
     notes: notes ? notes.trim() : '',
     status: 'Pending',
@@ -480,10 +513,13 @@ app.get('/api/admin/orders/export', requireAdmin, (req, res) => {
     'Phone',
     'WhatsApp',
     'State',
-    'City',
+    'Delivery Method',
+    'Motor Park Terminal',
+    'Doorstep Fee (NGN)',
     'Delivery Address',
     'Quantity',
     'Subtotal (NGN)',
+    'Discount (NGN)',
     'Delivery Fee (NGN)',
     'Total (NGN)',
     'Status',
@@ -503,11 +539,14 @@ app.get('/api/admin/orders/export', requireAdmin, (req, res) => {
     escapeCsv(o.phone),
     escapeCsv(o.whatsapp),
     escapeCsv(o.state),
-    escapeCsv(o.city),
+    escapeCsv(o.deliveryMethod || 'Motor Park Delivery'),
+    escapeCsv(o.motorParkLocation || 'N/A'),
+    escapeCsv(o.doorstepFee || 0),
     escapeCsv(o.deliveryAddress),
     escapeCsv(o.quantity),
     escapeCsv(o.subtotal),
-    escapeCsv(o.deliveryFee ?? 'To be confirmed'),
+    escapeCsv(o.discount || 0),
+    escapeCsv(o.deliveryFee ?? 0),
     escapeCsv(o.total),
     escapeCsv(o.status),
     escapeCsv(o.notes)

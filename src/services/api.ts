@@ -13,8 +13,12 @@ export async function submitOrder(orderData: {
   phone: string;
   whatsapp?: string;
   state: string;
-  city: string;
-  deliveryAddress: string;
+  city?: string;
+  deliveryMethod?: 'Motor Park Delivery' | 'Doorstep Delivery';
+  motorParkLocation?: string;
+  doorstepFee?: number;
+  discount?: number;
+  deliveryAddress?: string;
   quantity: number;
   notes?: string;
 }): Promise<Order> {

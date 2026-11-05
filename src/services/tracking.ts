@@ -92,7 +92,7 @@ export function trackEvent(
         currency: 'NGN',
         items: [
           {
-            item_name: params?.content_name || 'Premium Smart Piano Kitchen Sink',
+            item_name: params?.content_name || 'A-01 Deadbolt Type Smart Lock',
             quantity: params?.num_items || 1,
             price: params?.value
           }

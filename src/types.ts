@@ -1,3 +1,5 @@
+export type DeliveryMethod = 'Motor Park Delivery' | 'Doorstep Delivery';
+
 export interface Order {
   id: string; // e.g. MC-83921
   createdAt: string;
@@ -5,11 +7,15 @@ export interface Order {
   phone: string;
   whatsapp?: string;
   state: string;
-  city: string;
+  city?: string;
+  deliveryMethod?: DeliveryMethod;
+  motorParkLocation?: string;
+  doorstepFee?: number;
   deliveryAddress: string;
   quantity: number;
   unitPrice: number;
   subtotal: number;
+  discount?: number; // Multi-unit discount if quantity > 1
   deliveryFee: number | null; // null if pending confirmation
   total: number;
   notes?: string;

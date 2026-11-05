@@ -35,7 +35,7 @@ export const Header: React.FC<HeaderProps> = ({ price, onOrderClick, onAdminClic
               onClick={onOrderClick}
               className="hidden md:inline-flex items-center gap-1 bg-white text-blue-700 hover:bg-emerald-50 px-2.5 py-0.5 rounded-md font-bold text-[11px] transition-colors cursor-pointer"
             >
-              Order Now ₦{price.toLocaleString()}
+              Order Now — Nationwide Delivery
             </button>
           </div>
         </div>
@@ -44,17 +44,17 @@ export const Header: React.FC<HeaderProps> = ({ price, onOrderClick, onAdminClic
       {/* Main Top Header Navigation */}
       <header className="w-full bg-white/95 backdrop-blur-md border-b border-blue-100 shadow-sm transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between gap-4 sm:gap-8">
-          {/* Zone 1: Modern Product & Workstation Wordmark */}
+          {/* Zone 1: Modern Product Wordmark */}
           <a href="#" className="flex items-center gap-2.5 sm:gap-3 text-left group shrink-0">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 to-emerald-600 text-white shadow-md shadow-blue-500/20 flex items-center justify-center transition-transform group-hover:scale-105">
-              <Waves className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 via-blue-500 to-emerald-600 text-white shadow-md shadow-blue-500/20 flex items-center justify-center transition-transform group-hover:scale-105">
+              <Lock className="w-5 h-5 text-white" />
             </div>
             <div className="flex flex-col">
               <span className="font-['Outfit'] font-extrabold text-base sm:text-xl tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">
-                Smart Piano Sink
+                A-01 Smart Lock
               </span>
               <span className="text-[10px] sm:text-[11px] tracking-wider uppercase text-emerald-600 font-bold">
-                Workstation (75 × 45 cm)
+                Deadbolt · 3D Face & Screen
               </span>
             </div>
           </a>
@@ -99,7 +99,7 @@ export const Header: React.FC<HeaderProps> = ({ price, onOrderClick, onAdminClic
               className="action-glow flex items-center gap-1.5 sm:gap-2 px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-extrabold text-xs sm:text-sm tracking-wide shadow-lg active:scale-[0.98] transition-all whitespace-nowrap shrink-0 cursor-pointer"
             >
               <ShoppingBag className="w-4 h-4 text-white shrink-0" />
-              <span>ORDER NOW — ₦{price.toLocaleString()}</span>
+              <span>ORDER NOW — NATIONWIDE DELIVERY</span>
             </button>
 
             {/* Admin Key */}

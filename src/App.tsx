@@ -18,201 +18,162 @@ import { MobileStickyBar } from './components/MobileStickyBar';
 import { AdminDashboard } from './components/AdminDashboard';
 import { CookieBanner } from './components/CookieBanner';
 
-// Fallback initial config matching the required ₦135,000 price & reference specs
+// Fallback initial config matching the required ₦180,000 price & reference specs
 const initialFallbackConfig: PublicConfig = {
   settings: {
-    storeName: 'Smart Kitchen Store',
-    productName: 'Smart Kitchen Piano Sink (75 × 45 cm)',
-    headline: 'UPGRADE YOUR KITCHEN WITH THE PREMIUM SMART PIANO SINK',
-    subheading: 'Experience a smarter, more elegant kitchen with a beautifully designed multifunctional workstation sink that combines modern style with everyday convenience.',
-    sellingPrice: 135000,
-    whatsappNumber: '+2349136827730',
-    supportPhone: '09136827730',
-    supportEmail: 'orders@smartkitchensink.ng',
+    storeName: 'Moonlight Crescent — Smart Security & Locks',
+    productName: 'A-01 Deadbolt Type Smart Lock',
+    headline: 'SMART ACCESS. SECURE EVERY DAY.',
+    subheading: 'Sleek design. Advanced protection. Built for reliability, designed for you. Advanced security meets modern convenience with 3D Face Recognition, 4.0-Inch Interior Screen, and Tuya Smart Remote Control.',
+    sellingPrice: 180000,
+    whatsappNumber: '+2348147778029',
+    supportPhone: '08147778029',
+    supportEmail: 'orders@smartlock.ng',
     pickupOfficeAddress: 'Plot 14 Admiralty Way, Lekki Phase 1, Lagos, Nigeria',
     videoEmbedUrl: '',
-    videoTitle: 'Smart Piano Kitchen Sink Operational Showcase',
-    videoDescription: 'Watch the 4-mode piano keys, flying rain waterfall flow, high-pressure glass rinser, and hydroelectric LED temperature display in action.',
+    videoTitle: 'A-01 Deadbolt Smart Lock Operational & Feature Showcase',
+    videoDescription: 'Watch 3D Face Recognition Cat-Eye Camera, Semiconductor Biometric Fingerprint, 4.0-Inch Interior IPS Screen, Virtual Passcode, and Tuya App remote unlock in action.',
     pixels: {
       metaPixelId: '947636671276929',
       tikTokPixelId: 'DB2I7I3C77UA626EHF30',
       googleAnalyticsId: ''
     },
     policyText: {
-      privacyPolicy: 'At Smart Kitchen Store, customer privacy is paramount. We only collect details necessary for processing your order and fulfilling delivery within Nigeria.',
-      termsAndConditions: 'All orders placed are confirmed via call or WhatsApp before dispatch. Payment on delivery is available in eligible zones upon package inspection.',
-      returnsPolicy: '7-day inspection and exchange period upon delivery. Items must remain unused in original protective packaging. Includes 1-Year Manufacturer Warranty.',
+      privacyPolicy: 'At Moonlight Crescent, customer privacy is paramount. We only collect details necessary for processing your order and fulfilling delivery within Nigeria.',
+      termsAndConditions: 'All orders placed are confirmed via call or WhatsApp before dispatch. Payment on delivery is available nationwide across Nigeria upon package inspection.',
+      returnsPolicy: '1-Year Comprehensive Warranty plus 7-day inspection and exchange period upon delivery. Items must remain in original protective packaging.',
       faqText: [
         {
-          question: '1. What is the Smart Kitchen Piano Sink (75 × 45 cm)?',
-          answer: 'It is a premium multifunctional culinary workstation featuring 4 tactile piano keys for water modes, flying rain waterfall spout, high-pressure glass rinser, internal hydroelectric LED temperature screen, and sliding cutting board ledges.'
+          question: '1. What is the A-01 Deadbolt Type Smart Lock?',
+          answer: 'The A-01 is a premium deadbolt type smart door lock featuring 6-in-1 multi-access: 3D Face Recognition via an infrared cat-eye camera, 4.0-inch interior HD IPS color display screen, 0.3s semiconductor biometric fingerprint, anti-peep capacitive touch passcode, RFID IC smart card swipe, mobile app remote control via Tuya/Smart Life, and physical emergency mechanical keys.'
         },
         {
-          question: '2. How does the digital temperature display work without batteries?',
-          answer: 'The LED display and ambient glow are powered 100% by internal hydroelectric water hydraulics. As water flows through the faucet, it generates power automatically. Zero batteries, wiring, or electrical connections required.'
+          question: '2. How does the 3D Face Recognition & 4.0-inch Interior Screen work?',
+          answer: 'The exterior unit is equipped with a high-precision 3D infrared cat-eye camera that recognizes authorized faces in under 0.5 seconds, even in pitch-black night conditions or with hats and glasses. When someone approaches or rings the built-in doorbell, the interior 4.0-inch high-definition screen lights up instantly so you can see exactly who is outside before opening the door.'
         },
         {
-          question: '3. What dimensions and countertop cutout are required?',
-          answer: 'The sink measures 750 mm × 450 mm (75 × 45 cm) with a generous 205 mm deep basin. It fits standard Nigerian 700 × 400 mm countertop cutouts and supports topmount (drop-in), undermount, or flushmount installation.'
+          question: '3. What happens if the battery runs down completely?',
+          answer: 'The lock is equipped with dual emergency fail-safes. First, there is an external Type-C USB emergency power interface at the bottom that you can power instantly using any mobile power bank. Second, 2 high-security laser-cut mechanical override keys are included to unlock the door manually at any time. The high-capacity rechargeable lithium battery lasts 6 to 8 months per charge and alerts you well in advance when battery drops below 20%.'
         },
         {
-          question: '4. What is included in the complete box package?',
-          answer: 'Every package contains the SUS304 Nano Piano Sink basin, Integrated Waterfall Faucet Tower with 360° pull-out sprayer, Solid Wood Chopping Board, Stainless Steel Perforated Washing Colander, Triangular Prep Basin, Automatic Glass Rinser, Soap Dispenser, and heavy-duty anti-odor drainage pipe assembly with standard 1/2" flexible hoses.'
+          question: '4. Will it fit my door? (Installation & Compatibility)',
+          answer: 'Yes! The A-01 Deadbolt Smart Lock is engineered to fit standard Nigerian residential and commercial doors with thicknesses between 40mm and 100mm. It works seamlessly on modern wooden doors, armored security doors, steel doors, stainless steel doors, and composite doors. Full mounting hardware, strike plate, and installation template are included.'
         },
         {
           question: '5. How does delivery work across Nigeria?',
-          answer: 'We deliver nationwide across all 36 states and the FCT. For Lagos State, doorstep delivery is ₦5,000 and takes 1–2 business days. For other states, delivery takes 3–5 business days to your major commercial park terminal or direct doorstep.'
+          answer: 'We deliver nationwide across all 36 states and the FCT. Base delivery is FREE nationwide! If you choose Motor Park Delivery, it is 100% FREE and requires no street address — simply pick your preferred transit terminal. In Lagos State, Doorstep Delivery is completely FREE (no extra fee). In other states, Doorstep Delivery attracts an extra fee of ₦5,000. Plus, enjoy an instant ₦5,000 discount for every additional lock ordered!'
         },
         {
-          question: '6. Which payment methods are available?',
-          answer: 'We support Payment on Delivery (Cash or Bank Transfer upon inspecting the sink) across major cities in Nigeria.'
+          question: '6. Can I generate temporary passcodes for guests or cleaners?',
+          answer: 'Yes. Via the connected Tuya Smart / Smart Life smartphone app, you can create one-time dynamic passwords or time-restricted PIN codes for guests, domestic staff, or Airbnb tenants without revealing your master master code. You also receive real-time push notifications and full unlock history logs on your phone.'
         },
         {
           question: '7. How do I contact customer support or confirm via WhatsApp?',
-          answer: 'Once you submit your order form, you can immediately confirm with your unique order reference directly on WhatsApp with one click, or call our desk at 09136827730.'
+          answer: 'Once you submit your order form, you can immediately confirm with your unique order reference directly on WhatsApp with one click, or call our customer line directly at 08147778029.'
         }
       ]
     }
   },
   deliveryFees: {
-    'Lagos': 5000,
-    'Federal Capital Territory (Abuja)': 8000,
-    'Rivers': 8500,
-    'Ogun': 6500,
-    'Oyo': 7000,
-    'Delta': 8500,
-    'Edo': 8000,
-    'Anambra': 8500,
-    'Enugu': 8500,
-    'Kano': 10000,
-    'Kaduna': 9500
+    'Lagos': 0,
+    'Federal Capital Territory (Abuja)': 5000,
+    'Rivers': 5000,
+    'Ogun': 5000,
+    'Oyo': 5000,
+    'Delta': 5000,
+    'Edo': 5000,
+    'Anambra': 5000,
+    'Enugu': 5000,
+    'Kano': 5000,
+    'Kaduna': 5000
   },
   specifications: [
-    { label: 'Outer Dimensions', value: '750 mm (L) × 450 mm (W) × 205 mm (Basin Depth) [75 × 45 cm]' },
-    { label: 'Countertop Cutout', value: '700 × 400 mm (Fits standard 750 × 450 mm counter fit)' },
-    { label: 'Material & Construction', value: 'Commercial SUS304 Honeycomb Nano Anti-Scratch Stainless Steel' },
-    { label: 'Surface Finish', value: 'High-Density Nano PVD Titanium Grey (Oil & Scratch Resistant)' },
-    { label: 'Water Controls (4 Piano Keys)', value: 'Flying Rain Waterfall, 360° Pull-Out Sprayer, Glass Rinser, Drinking Tap' },
-    { label: 'LED Temperature Console', value: 'Hydroelectric Self-Powered Display (°C) & Ambient Flow Glow' },
-    { label: 'Automatic Glass Rinser', value: '5-Jet Inverted High-Pressure Cup Washer (Cleans in 2 Seconds)' },
-    { label: 'Workstation Ledge System', value: 'Double-Track Sliding Ledges for Chopping Board & Colander' },
-    { label: 'Plumbing & Fittings', value: 'Standard Nigerian 1/2" Hot & Cold Inlets + Anti-Odor Siphon Trap' },
-    { label: 'Warranty & Guarantee', value: '1-Year Manufacturer Warranty + 7-Day Inspection/Exchange Period' }
+    { label: 'Model & Type', value: 'A-01 Deadbolt Type Smart Lock (Front & Rear Panels)' },
+    { label: 'Access Methods (6-in-1)', value: '3D Face Recognition, Semiconductor Fingerprint, Anti-Peep Touch PIN, Smart RFID Card, Tuya App, Mechanical Key' },
+    { label: 'Face Recognition Technology', value: '3D Infrared Cat-Eye Camera with Biometric Depth Sensor (Works in dark night, anti-photo spoofing, <0.5s)' },
+    { label: 'Interior Screen', value: '4.0-Inch High-Definition IPS Color Screen (Instant video display of visitors outside)' },
+    { label: 'Fingerprint Recognition', value: '0.3-Second Semiconductor Biometric Sensor with 360° Angle Reading (Stores up to 100 fingerprints)' },
+    { label: 'Smart Mobile App', value: 'Tuya Smart / Smart Life (Remote Unlock, Temporary Guest Passwords, Real-Time Access History Logs)' },
+    { label: 'Doorbell Function', value: 'Integrated One-Click Exterior Smart Chime Doorbell + Indoor Chime & Mobile App Push Alert' },
+    { label: 'Physical Security & Handles', value: 'Heavy-Duty Stainless Steel Deadbolt Mortise + Ergonomic Quick-Open Handle + Internal Anti-Lock Knob' },
+    { label: 'Materials & Build', value: 'Reinforced High-Tensile Aerospace Aluminum Alloy & Zinc Alloy Chassis (Anti-Drill, Anti-Prying)' },
+    { label: 'Power & Battery Life', value: 'Rechargeable High-Capacity Lithium Battery Pack (6–8 Months runtime per charge + Low Battery Warning)' },
+    { label: 'Emergency Power & Backup', value: 'External Type-C USB Port for Power Bank Jumpstart + 2x Laser-Cut Physical Emergency Override Keys' },
+    { label: 'Door Thickness Compatibility', value: 'Universal fit for doors 40 mm – 100 mm thick (Wooden, Security Armored, Steel, Stainless Steel, Composite)' },
+    { label: 'Warranty & Support', value: '1-Year Comprehensive Replacement Warranty + Nationwide Payment on Delivery' }
   ],
   includedItems: [
-    'Smart Piano Workstation Basin (750 × 450 mm)',
-    'Waterfall & 3-Mode Pull-Out Spray Faucet Tower',
-    'Custom Solid Walnut Prep Cutting Board',
-    'Stainless Steel Perforated Washing Colander',
-    'Inner Triangular Prep Washing Basin',
-    'High-Pressure Glass Cup Rinser & Connector',
-    'Matte Finish Soap Dispenser',
-    'Complete Multi-Layer Anti-Odor Drainage Waste Pipe Set',
-    'Hot & Cold Stainless Steel Flexible Braided Hoses'
+    'A-01 Smart Lock Exterior Front Panel with 3D Face Recognition Camera, Keypad & Fingerprint Sensor',
+    'A-01 Smart Lock Interior Rear Panel with 4.0-Inch HD IPS Color Screen & Quick-Open Handle',
+    'Heavy-Duty Multi-Bolt Stainless Steel Security Mortise Lock Body & Cylinder',
+    'High-Capacity Rechargeable Lithium Battery Pack',
+    'Fast Type-C USB Battery Charging Cable',
+    '2 × High-Security Encrypted RFID Smart IC Cards',
+    '2 × Precision Laser-Cut Mechanical Emergency Override Keys',
+    'Heavy-Duty Stainless Steel Strike Plate & Complete Screw Mounting Hardware Kit',
+    'Detailed English User Guide & Door Cutout Template'
   ],
   galleryImages: [
     {
-      id: 'img-hero-installation',
-      url: '/images/H360739baac2a4cf88fc2046698612fb1a.jpg',
-      title: 'Luxury Kitchen Island Installation',
-      subtitle: 'Integrated SUS304 smart sink with dual waterfall and real-time digital temperature display'
+      id: 'img-master-poster',
+      url: '/public/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png',
+      title: 'A-01 Deadbolt Smart Lock Official Showcase',
+      subtitle: 'Complete front and interior panel display with 3D Face Recognition, 4.0-inch screen, and Tuya Smart connectivity'
     },
     {
-      id: 'img-piano-keys-modes',
-      url: '/images/H7cd8196bf11145a98421bf3effdabdf9r.jpg',
-      title: 'Tactile Piano Keys & 4 Water Modes',
-      subtitle: 'Tap water outlet, flying rain, cascading waterfall, and high-pressure cup washer'
+      id: 'img-door-installed',
+      url: '/images/smart_lock_door_1793893094297.jpg',
+      title: 'Luxury Apartment Door Installation',
+      subtitle: 'Sleek black finish with illuminated numeric touch keypad, round face camera, and deadbolt handle'
     },
     {
-      id: 'img-dimensions-blueprint',
-      url: '/images/H3c4573d0554c4af38cc585c26b09e3e8z.jpg',
-      title: 'Technical Dimensions & Cutout Blueprint',
-      subtitle: 'Standard 750 × 450 mm sink with 205 mm deep basin for standard 700 × 400 mm countertop cutout'
+      id: 'img-interior-screen',
+      url: '/images/smart_lock_screen_1793893110263.jpg',
+      title: '4.0-Inch Interior HD Color Screen',
+      subtitle: 'See live video of visitors outside, quick-open safety handle, and mechanical anti-lock knob'
     },
     {
-      id: 'img-flying-rain-waterfall',
-      url: '/images/Hd85d44aecd9c4c648346996b0540cbd69.jpg',
-      title: 'Flying Rain Waterfall Flow',
-      subtitle: 'Gentle rainfall cascade across the perforated stainless steel washing colander'
-    },
-    {
-      id: 'img-pullout-sprayer',
-      url: '/images/Hbfbca46f9fec49179449b17fec40bc4ey.jpg',
-      title: '360° Pull-Out Sprayer Faucet',
-      subtitle: 'Flexible pull-out spray head reaching all sink corners with multiple spray patterns'
-    },
-    {
-      id: 'img-plate-washing',
-      url: '/images/Hd1946b3f5dba430aba7b4b0ecb381f0d1.jpg',
-      title: 'High-Flow Waterfall Plate Washing',
-      subtitle: 'Wide sheet water flow for rapid dish cleaning and vegetable preparation'
-    },
-    {
-      id: 'img-honeycomb-surface',
-      url: '/images/H29dff7a62abd4a2fa499cb2b7c22bd73i.jpg',
-      title: 'Honeycomb Anti-Scratch Nano Surface',
-      subtitle: 'High-tensile SUS304 steel with embossed hexagonal nano-pattern resisting scratches and grease'
-    },
-    {
-      id: 'img-real-unboxing-box',
-      url: '/images/H25a587f0b5d442b5aed842726533b1296_1.png',
-      title: 'Real Factory Unboxing Package',
-      subtitle: 'Actual boxed unit with solid wood chopping board, drainage pipes, basins, and protective foam'
-    },
-    {
-      id: 'img-package-components-grid',
-      url: '/images/H94af9dd4bf0b4dcdaa5f60afba5a6c56x.png',
-      title: 'Complete Box Component Checklist',
-      subtitle: 'Includes sink, flying rain faucet, basin-in-basin, chopping board, basket, valves, and sewer pipe'
-    },
-    {
-      id: 'img-showroom-counter',
-      url: '/images/H25af698200be4abd9392342c5f411ad5k.jpg',
-      title: 'Real Showroom Countertop Unit',
-      subtitle: 'Double sliding track ledges fitted with perforated colander and cutting board'
-    },
-    {
-      id: 'img-detached-console-bar',
-      url: '/images/H1591db5734b3464b8000d90f72ddd4fcb.jpg',
-      title: 'Basin & Modular Faucet Console Bar',
-      subtitle: 'Precision engineered mounting holes for faucet tower, soap dispenser, and cup washer'
+      id: 'img-face-scan',
+      url: '/images/smart_lock_face_scan_1793893126016.jpg',
+      title: 'Instant 3D Infrared Face Recognition',
+      subtitle: 'Hands-free biometric unlocking in under 0.5 seconds with advanced infrared cat-eye camera'
     }
   ],
   reviews: [
     {
       id: 'rev-1',
-      name: 'Arc. Emeka Okafor',
-      location: 'Lekki Phase 1, Lagos',
+      name: 'Arc. Femi Adeyemi',
+      location: 'Ikoyi, Lagos',
       rating: 5,
-      date: '2026-09-28',
-      comment: 'Installed this in our newly remodeled kitchen in Lekki. The waterfall faucet and the piano switch keys feel like a million bucks. Water pressure from the glass rinser is fantastic and the nano finish cleans easily.',
+      date: '2026-10-24',
+      comment: 'Installed this A-01 smart lock on our main apartment entrance door in Ikoyi. The 3D face recognition is instantaneous—as soon as I walk up to the door it unlocks without touching anything. The interior 4-inch screen is a huge blessing for the family.',
       verified: true
     },
     {
       id: 'rev-2',
-      name: 'Hajiya Aisha Mohammed',
-      location: 'Gwarinpa Estate, Abuja',
+      name: 'Barrister Chidinma Okonkwo',
+      location: 'Maitama, Abuja',
       rating: 5,
-      date: '2026-10-02',
-      comment: 'Delivered promptly to Abuja within 3 days. Our plumber had zero issues with the standard fittings. The digital temperature display helps so much when preparing hot water for baby bottles and rinsing oily pots.',
+      date: '2026-10-29',
+      comment: 'Delivery to Abuja was super fast via Utako transit terminal. Solid build quality, heavy-duty deadbolt. The Tuya app lets me generate temporary codes for my cleaners when I am in court. 100% worth the ₦180,000 investment.',
       verified: true
     },
     {
       id: 'rev-3',
-      name: 'Engr. Tunde Adeleke',
-      location: 'Ikeja GRA, Lagos',
+      name: 'Engr. Kenneth Nwachukwu',
+      location: 'Peter Odili Road, Port Harcourt',
       rating: 5,
-      date: '2026-10-09',
-      comment: 'Very thick and solid 304 stainless steel. The wooden cutting board and colander fit right onto the inner tracks, turning the sink into a full prep station. Worth every kobo of the ₦135,000.',
+      date: '2026-11-01',
+      comment: 'Ordered 2 locks with the multi-item discount for my duplex in PH. The semiconductor fingerprint sensor never fails, even with wet hands. Very reassuring to have the Type-C emergency port and manual keys just in case.',
       verified: true
     },
     {
       id: 'rev-4',
-      name: 'Dr. (Mrs) Nkechi Wilcox',
-      location: 'Old GRA, Port Harcourt',
+      name: 'Alhaji Ibrahim Danladi',
+      location: 'Bodija, Ibadan',
       rating: 5,
-      date: '2026-10-12',
-      comment: 'Ordered 2 units for our duplex in Port Harcourt. Excellent communication from the Moonlight Crescent team and the piano keys have such a smooth, high-grade mechanical feel.',
+      date: '2026-11-03',
+      comment: 'Top notch security. The loud doorbell chime and the interior screen make it so safe for my children at home. Excellent customer support when placing the order.',
       verified: true
     }
   ]
@@ -262,10 +223,10 @@ export default function App() {
     }
   };
 
-  const sellingPrice = config.settings.sellingPrice || 135000;
+  const sellingPrice = config.settings.sellingPrice || 180000;
   const heroImage =
     config.galleryImages[0]?.url ||
-    '/images/H360739baac2a4cf88fc2046698612fb1a.jpg';
+    '/public/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png';
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] font-['Plus_Jakarta_Sans',sans-serif] flex flex-col selection:bg-blue-600 selection:text-white">

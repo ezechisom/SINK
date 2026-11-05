@@ -262,7 +262,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       o.fullName.toLowerCase().includes(q) ||
       o.phone.toLowerCase().includes(q) ||
       o.state.toLowerCase().includes(q) ||
-      o.city.toLowerCase().includes(q);
+      (o.city ? o.city.toLowerCase().includes(q) : false) ||
+      (o.deliveryMethod ? o.deliveryMethod.toLowerCase().includes(q) : false) ||
+      (o.motorParkLocation ? o.motorParkLocation.toLowerCase().includes(q) : false);
     return matchesFilter && matchesSearch;
   });
 
@@ -537,8 +539,33 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                 </td>
 
                                 <td className="p-3.5 max-w-xs">
-                                  <div className="font-medium text-slate-200">{ord.city}, {ord.state}</div>
-                                  <div className="text-[11px] text-slate-400 line-clamp-2 mt-0.5">{ord.deliveryAddress}</div>
+                                  <div className="font-medium text-slate-200">
+                                    {ord.city && ord.city !== ord.state ? `${ord.city}, ` : ''}{ord.state}
+                                  </div>
+                                  <div className="mt-0.5 flex flex-wrap items-center gap-1">
+                                    <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                                      ord.deliveryMethod === 'Doorstep Delivery'
+                                        ? 'bg-amber-400/20 text-amber-300 border border-amber-400/30'
+                                        : 'bg-blue-400/20 text-blue-300 border border-blue-400/30'
+                                    }`}>
+                                      {ord.deliveryMethod || 'Motor Park'}
+                                    </span>
+                                    {ord.motorParkLocation && (
+                                      <span className="inline-block px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-blue-500/20 text-blue-300 border border-blue-400/40">
+                                        Terminal: {ord.motorParkLocation}
+                                      </span>
+                                    )}
+                                    {ord.doorstepFee !== undefined && ord.deliveryMethod === 'Doorstep Delivery' && (
+                                      <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                                        ord.doorstepFee === 0
+                                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                          : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                                      }`}>
+                                        {ord.doorstepFee === 0 ? 'Doorstep: Free (Lagos)' : '+₦5k Fee'}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="text-[11px] text-slate-400 line-clamp-2 mt-1">{ord.deliveryAddress}</div>
                                   {ord.notes && (
                                     <div className="text-[10px] text-amber-400/80 italic mt-0.5">"{ord.notes}"</div>
                                   )}
@@ -548,11 +575,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                   <div className="font-mono text-white font-semibold">
                                     {ord.quantity} × ₦{ord.unitPrice.toLocaleString()}
                                   </div>
+                                  {ord.discount && ord.discount > 0 && (
+                                    <div className="text-emerald-400 font-bold text-[11px] font-mono">
+                                      Discount: -₦{ord.discount.toLocaleString()}
+                                    </div>
+                                  )}
                                   <div className="text-amber-400 font-bold font-['Outfit'] text-sm tabular-nums mt-0.5">
                                     Total: ₦{ord.total.toLocaleString()}
                                   </div>
                                   <div className="text-[10px] text-slate-500">
-                                    Fee: {ord.deliveryFee !== null ? `₦${ord.deliveryFee.toLocaleString()}` : 'TBC'}
+                                    Delivery: {ord.deliveryFee ? `₦${ord.deliveryFee.toLocaleString()}` : 'Free'}
                                   </div>
                                 </td>
 
@@ -817,7 +849,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <div>
                       <h3 className="text-lg font-bold text-white">Manage Customer Reviews</h3>
                       <p className="text-xs text-slate-400">
-                        Add verified reviews from real Nigerian customers who have installed the sink.
+                        Add verified reviews from real Nigerian customers who have installed the smart lock.
                       </p>
                     </div>
                     {reviewSuccess && (
