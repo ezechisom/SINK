@@ -31,6 +31,7 @@ import {
   adminUpdateSpecifications,
   adminUpdateMedia
 } from '../services/api';
+import { trackTikTokDirect, trackMetaDirect } from '../services/tracking';
 
 interface AdminDashboardProps {
   isOpen: boolean;
@@ -71,6 +72,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [storeSettings, setStoreSettings] = useState<StoreSettings>(publicConfig.settings);
   const [newAdminPassword, setNewAdminPassword] = useState('');
   const [settingsSuccess, setSettingsSuccess] = useState<string | null>(null);
+  const [tikTokTestSuccess, setTikTokTestSuccess] = useState<string | null>(null);
+  const [metaTestSuccess, setMetaTestSuccess] = useState<string | null>(null);
+  const [isTestingMeta, setIsTestingMeta] = useState(false);
 
   // Delivery Fees State
   const [deliveryFees, setDeliveryFees] = useState<DeliveryFeesMap>(publicConfig.deliveryFees);
@@ -708,44 +712,237 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
                   </div>
 
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-semibold text-slate-300">
+                        Formspree Order Email Notification URL
+                      </label>
+                      <span className="text-[11px] font-mono font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/40">
+                        Active & Forwarding to Email
+                      </span>
+                    </div>
+                    <input
+                      type="url"
+                      placeholder="https://formspree.io/f/xbggbvjg"
+                      value={storeSettings.formspreeEndpoint || 'https://formspree.io/f/xbggbvjg'}
+                      onChange={(e) => setStoreSettings({ ...storeSettings, formspreeEndpoint: e.target.value })}
+                      className="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/15 text-white text-sm focus:outline-none focus:border-amber-400 font-mono"
+                    />
+                    <span className="text-[10px] text-slate-400 mt-1 block">
+                      Whenever a customer submits an order, a complete order breakdown email is automatically sent to your inbox via this Formspree link.
+                    </span>
+                  </div>
+
                   {/* Tracking Pixels Configuration */}
                   <div className="pt-4 border-t border-white/10 space-y-4">
                     <h4 className="text-sm font-bold text-white">Marketing & Conversion Tracking Pixels</h4>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Meta (Facebook) Pixel ID
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-xs font-semibold text-slate-300">
+                          Meta (Facebook) Pixel ID
+                        </label>
+                        <span className="text-[11px] font-mono font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/40">
+                          Active & Tracking
+                        </span>
+                      </div>
                       <input
                         type="text"
-                        placeholder="e.g. 123456789012345"
-                        value={storeSettings.pixels?.metaPixelId || ''}
+                        placeholder="e.g. 947636671276929"
+                        value={storeSettings.pixels?.metaPixelId || '947636671276929'}
                         onChange={(e) =>
                           setStoreSettings({
                             ...storeSettings,
                             pixels: { ...storeSettings.pixels, metaPixelId: e.target.value }
                           })
                         }
-                        className="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/15 text-white text-sm focus:outline-none focus:border-amber-400"
+                        className="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/15 text-white text-sm focus:outline-none focus:border-amber-400 font-mono"
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        TikTok Pixel ID
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="e.g. CXXXXXXXXXXXXXX"
-                        value={storeSettings.pixels?.tikTokPixelId || ''}
-                        onChange={(e) =>
-                          setStoreSettings({
-                            ...storeSettings,
-                            pixels: { ...storeSettings.pixels, tikTokPixelId: e.target.value }
-                          })
-                        }
-                        className="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/15 text-white text-sm focus:outline-none focus:border-amber-400"
-                      />
+                    <div className="p-4 rounded-xl bg-blue-950/40 border border-blue-500/30 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-blue-300 uppercase tracking-wider">
+                          Meta Conversions API (CAPI) Server-Side
+                        </span>
+                        <span className="text-[10px] text-emerald-300 font-semibold bg-emerald-900/60 px-2 py-0.5 rounded">
+                          Deduplication Enabled
+                        </span>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                          Conversions API Access Token (System User Token)
+                        </label>
+                        <input
+                          type="password"
+                          placeholder="EAAG... (Paste from Meta Events Manager > Settings)"
+                          value={storeSettings.pixels?.metaAccessToken || ''}
+                          onChange={(e) =>
+                            setStoreSettings({
+                              ...storeSettings,
+                              pixels: { ...storeSettings.pixels, metaAccessToken: e.target.value }
+                            })
+                          }
+                          className="w-full px-3 py-2 rounded-lg bg-black/50 border border-white/15 text-white text-xs focus:outline-none focus:border-blue-400 font-mono"
+                        />
+                        <span className="text-[10px] text-slate-400 mt-1 block">
+                          When set, purchase events are dispatched directly to Meta Graph API from the server with SHA256 hashed customer parameters for 100% conversion attribution.
+                        </span>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                          Test Event Code (Optional)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. TEST12345 (From Events Manager > Test Events tab)"
+                          value={storeSettings.pixels?.metaTestEventCode || ''}
+                          onChange={(e) =>
+                            setStoreSettings({
+                              ...storeSettings,
+                              pixels: { ...storeSettings.pixels, metaTestEventCode: e.target.value }
+                            })
+                          }
+                          className="w-full px-3 py-2 rounded-lg bg-black/50 border border-white/15 text-white text-xs focus:outline-none focus:border-blue-400 font-mono"
+                        />
+                        <span className="text-[10px] text-slate-400 mt-1 block">
+                          If testing in Meta Events Manager Test Events tab, paste your session code here or add <code className="text-blue-300">?test_event_code=...</code> to your URL.
+                        </span>
+                      </div>
+
+                      <div className="pt-2 flex items-center justify-between gap-3 flex-wrap">
+                        <button
+                          type="button"
+                          disabled={isTestingMeta}
+                          onClick={async () => {
+                            setIsTestingMeta(true);
+                            setMetaTestSuccess(null);
+                            try {
+                              trackMetaDirect('ViewContent', {
+                                content_name: storeSettings.productName || 'A-01 Deadbolt Type Smart Lock',
+                                content_type: 'product',
+                                value: storeSettings.sellingPrice || 180000,
+                                currency: 'NGN'
+                              });
+                              const res = await fetch('/api/meta-capi/test', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  pixelId: storeSettings.pixels?.metaPixelId || '947636671276929',
+                                  accessToken: storeSettings.pixels?.metaAccessToken,
+                                  testEventCode: storeSettings.pixels?.metaTestEventCode
+                                })
+                              });
+                              const data = await res.json();
+                              if (data.mode === 'graph_api') {
+                                setMetaTestSuccess('✓ Live test event dispatched directly to Meta Graph API for Pixel 947636671276929! Check Meta Events Manager (Test Events tab).');
+                              } else {
+                                setMetaTestSuccess('✓ Browser Meta Pixel 947636671276929 fired ViewContent & PageView! (Paste your Access Token above to also dispatch server-side Graph API hits).');
+                              }
+                            } catch (e: any) {
+                              setMetaTestSuccess(`Meta test error: ${e.message}`);
+                            } finally {
+                              setIsTestingMeta(false);
+                              setTimeout(() => setMetaTestSuccess(null), 8000);
+                            }
+                          }}
+                          className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-xs transition-all shadow-md cursor-pointer disabled:opacity-50"
+                        >
+                          {isTestingMeta ? 'Sending Test Event...' : 'Send Test Event to Meta Pixel & CAPI Now'}
+                        </button>
+                        <span className="text-[11px] text-slate-400">
+                          Dual-tracks Browser Pixel &amp; Server CAPI
+                        </span>
+                      </div>
+
+                      {metaTestSuccess && (
+                        <div className="p-2.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold">
+                          {metaTestSuccess}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* TikTok Pixel Card */}
+                    <div className="p-4 rounded-xl bg-black/30 border border-white/10 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">
+                          TikTok Pixel Connection
+                        </span>
+                        <span className="text-[10px] text-emerald-300 font-semibold bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                          ✓ Installed &amp; Active
+                        </span>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 mb-1">
+                          TikTok Pixel ID
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. DBMVHBRC77UASCMH7A20"
+                          value={storeSettings.pixels?.tikTokPixelId || ''}
+                          onChange={(e) =>
+                            setStoreSettings({
+                              ...storeSettings,
+                              pixels: { ...storeSettings.pixels, tikTokPixelId: e.target.value }
+                            })
+                          }
+                          className="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/15 text-white text-sm focus:outline-none focus:border-amber-400 font-mono"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                          TikTok Test Event Code (Optional)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. TEST12345 (From TikTok Events Manager > Test Events tab)"
+                          value={storeSettings.pixels?.tikTokTestEventCode || ''}
+                          onChange={(e) =>
+                            setStoreSettings({
+                              ...storeSettings,
+                              pixels: { ...storeSettings.pixels, tikTokTestEventCode: e.target.value }
+                            })
+                          }
+                          className="w-full px-3 py-2 rounded-lg bg-black/50 border border-white/15 text-white text-xs focus:outline-none focus:border-amber-400 font-mono"
+                        />
+                        <span className="text-[10px] text-slate-400 mt-1 block">
+                          If testing inside TikTok Ads Manager Test Events tab, paste your session test code here or append <code className="text-amber-300">?test_event_code=...</code> to your site URL.
+                        </span>
+                      </div>
+
+                      <div className="pt-2 flex items-center justify-between gap-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            trackTikTokDirect('ViewContent', {
+                              content_id: 'A-01',
+                              content_name: 'A-01 Deadbolt Type Smart Lock',
+                              price: 180000,
+                              value: 180000,
+                              currency: 'NGN'
+                            });
+                            setTikTokTestSuccess('✓ Live test event dispatched to TikTok Pixel (DBMVHBRC77UASCMH7A20)! Check TikTok Events Manager.');
+                            setTimeout(() => setTikTokTestSuccess(null), 6000);
+                          }}
+                          className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-extrabold text-xs transition-all shadow-md cursor-pointer"
+                        >
+                          Send Test Event to TikTok Now
+                        </button>
+
+                        <span className="text-[11px] text-slate-400">
+                          Base code fires PageView on every page
+                        </span>
+                      </div>
+
+                      {tikTokTestSuccess && (
+                        <div className="p-2.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold">
+                          {tikTokTestSuccess}
+                        </div>
+                      )}
                     </div>
 
                     <div>

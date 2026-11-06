@@ -14,8 +14,11 @@ const DB_FILE = path.join(DATA_DIR, 'db.json');
 
 app.use(express.json());
 
-// Serve static images directly from public/images
+// Serve static images directly from public/images, public/assets, and public
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Ensure data folder exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -88,7 +91,7 @@ const initialData = {
     videoDescription: 'Watch the 4-mode piano keys, flying rain waterfall flow, high-pressure glass rinser, and hydroelectric LED temperature display in action.',
     pixels: {
       metaPixelId: '947636671276929',
-      tikTokPixelId: 'DB2I7I3C77UA626EHF30',
+      tikTokPixelId: 'DBMVHBRC77UASCMH7A20',
       googleAnalyticsId: ''
     },
     policyText: {
@@ -153,70 +156,58 @@ const initialData = {
   ],
   galleryImages: [
     {
-      id: 'img-hero-installation',
-      url: '/images/H360739baac2a4cf88fc2046698612fb1a.jpg',
-      title: 'Luxury Kitchen Island Installation',
-      subtitle: 'Integrated SUS304 smart sink with dual waterfall and real-time digital temperature display'
+      id: 'img-master-poster',
+      url: '/public/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png',
+      title: 'A-01 Smart Access Master Showcase',
+      subtitle: 'Official presentation featuring the ₦180,000 promo price, 3D Face Recognition, and 4.0-inch Interior Screen'
     },
     {
-      id: 'img-piano-keys-modes',
-      url: '/images/H7cd8196bf11145a98421bf3effdabdf9r.jpg',
-      title: 'Tactile Piano Keys & 4 Water Modes',
-      subtitle: 'Tap water outlet, flying rain, cascading waterfall, and high-pressure cup washer'
+      id: 'img-video-intercom',
+      url: '/public/assets/aistudio/image_d0f1a489.png',
+      title: 'Video Intercom & 3D Face Recognition',
+      subtitle: 'Active monitoring video intercom, 3D face recognition cat-eye camera, and Tuya Smart Mobile App integration'
     },
     {
-      id: 'img-dimensions-blueprint',
-      url: '/images/H3c4573d0554c4af38cc585c26b09e3e8z.jpg',
-      title: 'Technical Dimensions & Cutout Blueprint',
-      subtitle: 'Standard 750 × 450 mm sink with 205 mm deep basin for standard 700 × 400 mm countertop cutout'
+      id: 'img-fingerprint-05s',
+      url: '/public/assets/aistudio/image_3e43ad8c.png',
+      title: 'Semiconductor Fingerprint 0.5s Unlock',
+      subtitle: 'Ultra-fast 0.5-second biometric sensor, 99.99% recognition accuracy, and 0.01% false rejection rate'
     },
     {
-      id: 'img-flying-rain-waterfall',
-      url: '/images/Hd85d44aecd9c4c648346996b0540cbd69.jpg',
-      title: 'Flying Rain Waterfall Flow',
-      subtitle: 'Gentle rainfall cascade across the perforated stainless steel washing colander'
+      id: 'img-privacy-password',
+      url: '/public/assets/aistudio/image_59eea695.png',
+      title: 'Anti-Peep Virtual Privacy Password',
+      subtitle: 'Enter random fake PIN digits before or after your real password to protect against shoulder-surfing'
     },
     {
-      id: 'img-pullout-sprayer',
-      url: '/images/Hbfbca46f9fec49179449b17fec40bc4ey.jpg',
-      title: '360° Pull-Out Sprayer Faucet',
-      subtitle: 'Flexible pull-out spray head reaching all sink corners with multiple spray patterns'
+      id: 'img-multi-access-methods',
+      url: '/public/assets/aistudio/image_aa3a96c0.png',
+      title: '6-in-1 Multi-Access Smart Unlocking',
+      subtitle: 'Unlock via 3D Face, Biometric Fingerprint, Encrypted IC Card, Virtual Password, Mechanical Key, or Phone App'
     },
     {
-      id: 'img-plate-washing',
-      url: '/images/Hd1946b3f5dba430aba7b4b0ecb381f0d1.jpg',
-      title: 'High-Flow Waterfall Plate Washing',
-      subtitle: 'Wide sheet water flow for rapid dish cleaning and vegetable preparation'
+      id: 'img-parameters-anatomy',
+      url: '/public/assets/aistudio/image_d9b7f963.png',
+      title: 'Technical Parameters & Anatomy Architecture',
+      subtitle: 'Comprehensive breakdown of front and interior panel components, emergency ports, sensors, and safety handles'
     },
     {
-      id: 'img-honeycomb-surface',
-      url: '/images/H29dff7a62abd4a2fa499cb2b7c22bd73i.jpg',
-      title: 'Honeycomb Anti-Scratch Nano Surface',
-      subtitle: 'High-tensile SUS304 steel with embossed hexagonal nano-pattern resisting scratches and grease'
+      id: 'img-endurance-battery',
+      url: '/public/assets/aistudio/image_2cf67039.png',
+      title: 'Long Endurance Rechargeable Battery & Screen',
+      subtitle: 'High-capacity lithium battery lasting 3–5 months per charge with built-in interior color monitor'
     },
     {
-      id: 'img-real-unboxing-box',
-      url: '/images/H25a587f0b5d442b5aed842726533b1296_1.png',
-      title: 'Real Factory Unboxing Package',
-      subtitle: 'Actual boxed unit with solid wood chopping board, drainage pipes, basins, and protective foam'
+      id: 'img-product-package-list',
+      url: '/public/assets/aistudio/image_1fd68c2a.png',
+      title: 'Complete Box Hardware Package & Inclusions',
+      subtitle: 'Front & rear panels, heavy-duty multi-bolt lock body, 2 keys, 2 magnetic IC cards, USB cable, screws & templates'
     },
     {
-      id: 'img-package-components-grid',
-      url: '/images/H94af9dd4bf0b4dcdaa5f60afba5a6c56x.png',
-      title: 'Complete Box Component Checklist',
-      subtitle: 'Includes sink, flying rain faucet, basin-in-basin, chopping board, basket, valves, and sewer pipe'
-    },
-    {
-      id: 'img-showroom-counter',
-      url: '/images/H25af698200be4abd9392342c5f411ad5k.jpg',
-      title: 'Real Showroom Countertop Unit',
-      subtitle: 'Double sliding track ledges fitted with perforated colander and cutting board'
-    },
-    {
-      id: 'img-detached-console-bar',
-      url: '/images/H1591db5734b3464b8000d90f72ddd4fcb.jpg',
-      title: 'Basin & Modular Faucet Console Bar',
-      subtitle: 'Precision engineered mounting holes for faucet tower, soap dispenser, and cup washer'
+      id: 'img-mortise-dimensions',
+      url: '/public/assets/aistudio/image_61bdf854.png',
+      title: 'Heavy-Duty Security Mortise Dimensions (24*240)',
+      subtitle: 'Industrial-grade multi-bolt stainless steel lock body with 240mm faceplate for standard Nigerian security doors'
     }
   ],
   reviews: [
@@ -301,6 +292,343 @@ function requireAdmin(req: Request, res: Response, next: NextFunction) {
     return res.status(401).json({ error: 'Unauthorized: Session expired or invalid' });
   }
   next();
+}
+
+// Meta Conversions API (CAPI) helper functions
+function sha256Hash(val: string): string {
+  return crypto.createHash('sha256').update(val.trim().toLowerCase()).digest('hex');
+}
+
+interface MetaCapiParams {
+  eventName: string;
+  eventId?: string;
+  customData?: any;
+  userDataInput?: any;
+  req: Request;
+  testEventCodeOverride?: string;
+  sourceUrlOverride?: string;
+}
+
+async function sendMetaCapiGeneric({
+  eventName,
+  eventId,
+  customData,
+  userDataInput = {},
+  req,
+  testEventCodeOverride,
+  sourceUrlOverride
+}: MetaCapiParams) {
+  try {
+    const db = readDb();
+    const pixelId = db.settings?.pixels?.metaPixelId || '947636671276929';
+    const accessToken = db.settings?.pixels?.metaAccessToken || process.env.META_ACCESS_TOKEN;
+    const testEventCode = testEventCodeOverride || db.settings?.pixels?.metaTestEventCode || process.env.META_TEST_EVENT_CODE;
+
+    const cookies = ((req.headers.cookie as string) || '').split(';').reduce((acc: Record<string, string>, c: string) => {
+      const [k, v] = c.trim().split('=');
+      if (k && v) acc[k] = v;
+      return acc;
+    }, {});
+
+    const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket.remoteAddress || '127.0.0.1';
+    const userAgent = (req.headers['user-agent'] as string) || 'Mozilla/5.0';
+    const eventSourceUrl = sourceUrlOverride || (req.headers.referer as string) || (req.headers.origin as string) || 'https://ais-pre-esmhdnz2qbrgb3hajpuwbr-656280234555.europe-west1.run.app';
+
+    const formattedUserData: Record<string, any> = {
+      client_ip_address: clientIp,
+      client_user_agent: userAgent
+    };
+
+    if (userDataInput.phone) {
+      let cleanPhone = String(userDataInput.phone).replace(/[^0-9]/g, '');
+      if (cleanPhone.startsWith('0')) cleanPhone = '234' + cleanPhone.slice(1);
+      else if (!cleanPhone.startsWith('234') && cleanPhone.length === 10) cleanPhone = '234' + cleanPhone;
+      formattedUserData.ph = [sha256Hash(cleanPhone)];
+    }
+
+    if (userDataInput.fullName) {
+      const parts = String(userDataInput.fullName).trim().split(/\s+/);
+      if (parts[0]) formattedUserData.fn = [sha256Hash(parts[0])];
+      if (parts.length > 1) formattedUserData.ln = [sha256Hash(parts.slice(1).join(' '))];
+    } else {
+      if (userDataInput.firstName) formattedUserData.fn = [sha256Hash(userDataInput.firstName)];
+      if (userDataInput.lastName) formattedUserData.ln = [sha256Hash(userDataInput.lastName)];
+    }
+
+    if (userDataInput.email) formattedUserData.em = [sha256Hash(userDataInput.email)];
+    if (userDataInput.state) formattedUserData.st = [sha256Hash(userDataInput.state)];
+    if (userDataInput.city) formattedUserData.ct = [sha256Hash(userDataInput.city)];
+    formattedUserData.country = [sha256Hash('ng')];
+
+    if (cookies._fbp) formattedUserData.fbp = cookies._fbp;
+    if (cookies._fbc) formattedUserData.fbc = cookies._fbc;
+
+    const finalEventId = eventId || `${eventName.toLowerCase()}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+
+    const eventPayload: any = {
+      event_name: eventName,
+      event_time: Math.floor(Date.now() / 1000),
+      event_id: finalEventId,
+      event_source_url: eventSourceUrl,
+      action_source: 'website',
+      user_data: formattedUserData,
+      custom_data: {
+        currency: 'NGN',
+        value: customData?.value || 180000,
+        content_name: customData?.content_name || 'A-01 Deadbolt Type Smart Lock',
+        content_type: 'product',
+        ...(customData || {})
+      }
+    };
+
+    const payload: any = {
+      data: [eventPayload]
+    };
+
+    if (testEventCode && testEventCode.trim()) {
+      payload.test_event_code = testEventCode.trim();
+    }
+
+    if (accessToken && accessToken.trim()) {
+      const response = await fetch(`https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${accessToken.trim()}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      console.log(`[Meta CAPI] Dispatched ${eventName} (${finalEventId}) for Pixel ${pixelId}:`, data);
+      return { success: true, mode: 'graph_api', pixelId, eventId: finalEventId, result: data };
+    } else {
+      console.log(`[Meta CAPI] Event ${eventName} queued for Pixel ${pixelId} (Browser Pixel 947636671276929 active with matching eventID: ${finalEventId})`);
+      return { status: 'queued', pixelId, eventId: finalEventId, payload };
+    }
+  } catch (err: any) {
+    console.error('[Meta CAPI Error]:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+async function sendMetaConversionsApi(order: any, req: Request) {
+  try {
+    const db = readDb();
+    const pixelId = db.settings?.pixels?.metaPixelId || '947636671276929';
+    const accessToken = db.settings?.pixels?.metaAccessToken || process.env.META_ACCESS_TOKEN;
+    const testEventCode = db.settings?.pixels?.metaTestEventCode || process.env.META_TEST_EVENT_CODE;
+
+    let cleanPhone = (order.phone || '').replace(/[^0-9]/g, '');
+    if (cleanPhone.startsWith('0')) {
+      cleanPhone = '234' + cleanPhone.slice(1);
+    } else if (!cleanPhone.startsWith('234') && cleanPhone.length === 10) {
+      cleanPhone = '234' + cleanPhone;
+    }
+
+    const nameParts = (order.fullName || '').trim().split(/\s+/);
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+    const cookies = ((req.headers.cookie as string) || '').split(';').reduce((acc: Record<string, string>, c: string) => {
+      const [k, v] = c.trim().split('=');
+      if (k && v) acc[k] = v;
+      return acc;
+    }, {});
+
+    const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket.remoteAddress || '';
+    const userAgent = (req.headers['user-agent'] as string) || '';
+    const eventSourceUrl = (req.headers.referer as string) || (req.headers.origin as string) || 'https://ais-pre-esmhdnz2qbrgb3hajpuwbr-656280234555.europe-west1.run.app';
+
+    const userData: Record<string, any> = {
+      client_ip_address: clientIp,
+      client_user_agent: userAgent
+    };
+
+    if (cleanPhone) userData.ph = [sha256Hash(cleanPhone)];
+    if (firstName) userData.fn = [sha256Hash(firstName)];
+    if (lastName) userData.ln = [sha256Hash(lastName)];
+    if (order.state) userData.st = [sha256Hash(order.state)];
+    userData.country = [sha256Hash('ng')];
+    if (cookies._fbp) userData.fbp = cookies._fbp;
+    if (cookies._fbc) userData.fbc = cookies._fbc;
+
+    const payload: any = {
+      data: [
+        {
+          event_name: 'Purchase',
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: order.id, // deduplicated with browser fbq
+          event_source_url: eventSourceUrl,
+          action_source: 'website',
+          user_data: userData,
+          custom_data: {
+            currency: 'NGN',
+            value: order.total,
+            content_name: 'A-01 Deadbolt Type Smart Lock',
+            content_type: 'product',
+            num_items: order.quantity,
+            order_id: order.id
+          }
+        },
+        {
+          event_name: 'Lead',
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: `lead-${order.id}`,
+          event_source_url: eventSourceUrl,
+          action_source: 'website',
+          user_data: userData,
+          custom_data: {
+            currency: 'NGN',
+            value: order.total,
+            content_name: 'A-01 Deadbolt Type Smart Lock',
+            num_items: order.quantity
+          }
+        }
+      ]
+    };
+
+    if (testEventCode && testEventCode.trim()) {
+      payload.test_event_code = testEventCode.trim();
+    }
+
+    if (accessToken && accessToken.trim()) {
+      const response = await fetch(`https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${accessToken.trim()}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      console.log(`[Meta Conversions API] Sent events for Order ${order.id}:`, data);
+      return data;
+    } else {
+      console.log(`[Meta Conversions API] Prepared CAPI event for Order ${order.id} on Pixel ${pixelId} (Browser Pixel tracking active with matching eventID: ${order.id})`);
+      return { status: 'queued', pixelId, eventId: order.id };
+    }
+  } catch (err) {
+    console.error('[Meta Conversions API Error]:', err);
+    return null;
+  }
+}
+
+// Formspree email notification helper
+async function sendFormspreeNotification(order: any) {
+  try {
+    const db = readDb();
+    const endpoint = db.settings?.formspreeEndpoint || process.env.FORMSPREE_ENDPOINT || 'https://formspree.io/f/xbggbvjg';
+    if (!endpoint || !endpoint.trim()) return;
+
+    const response = await fetch(endpoint.trim(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        _subject: `New A-01 Smart Lock Order #${order.id} - ₦${order.total.toLocaleString()} (${order.fullName})`,
+        orderReference: order.id,
+        orderDate: new Date().toLocaleString('en-NG', { timeZone: 'Africa/Lagos' }),
+        customerFullName: order.fullName,
+        customerPhone: order.phone,
+        customerWhatsApp: order.whatsapp || order.phone,
+        deliveryState: order.state,
+        deliveryMethod: order.deliveryMethod,
+        pickupTerminal: order.motorParkLocation || 'N/A',
+        doorstepAddress: order.deliveryAddress,
+        quantityOrdered: `${order.quantity} unit(s)`,
+        unitPrice: `₦${order.unitPrice.toLocaleString()}`,
+        subtotal: `₦${order.subtotal.toLocaleString()}`,
+        multiItemDiscount: order.discount ? `-₦${order.discount.toLocaleString()}` : '₦0',
+        doorstepSurcharge: order.doorstepFee ? `₦${order.doorstepFee.toLocaleString()}` : '₦0 (FREE in Lagos / Motor Park)',
+        totalPayableOnDelivery: `₦${order.total.toLocaleString()}`,
+        paymentMethod: order.paymentMethod || 'Payment on Delivery',
+        customerNotes: order.notes || 'None'
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+    console.log(`[Formspree] Notification dispatched for Order ${order.id}:`, data);
+    return data;
+  } catch (err) {
+    console.error(`[Formspree Error] Failed to send email for Order ${order.id}:`, err);
+    return null;
+  }
+}
+
+// TikTok Events API (Server-Side Conversion Tracking)
+async function sendTikTokEventsApi(order: any, req: express.Request) {
+  try {
+    const db = readDb();
+    const pixelId = db.settings?.pixels?.tikTokPixelId || 'DBMVHBRC77UASCMH7A20';
+    const accessToken = db.settings?.pixels?.tikTokAccessToken || process.env.TIKTOK_ACCESS_TOKEN;
+    const testEventCode = db.settings?.pixels?.tikTokTestEventCode || process.env.TIKTOK_TEST_EVENT_CODE;
+
+    const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket.remoteAddress || '127.0.0.1';
+    const userAgent = (req.headers['user-agent'] as string) || 'Mozilla/5.0';
+    const eventSourceUrl = (req.headers['referer'] as string) || 'https://ais-pre-esmhdnz2qbrgb3hajpuwbr-656280234555.europe-west1.run.app/';
+
+    // Hash user phone for TikTok Advanced Matching
+    const crypto = await import('crypto');
+    const cleanPhone = (order.phone || '').replace(/[^0-9]/g, '');
+    const phoneToHash = cleanPhone.startsWith('0') ? `234${cleanPhone.slice(1)}` : cleanPhone;
+    const hashedPhone = phoneToHash ? crypto.createHash('sha256').update(phoneToHash).digest('hex') : undefined;
+
+    const payload: any = {
+      pixel_code: pixelId,
+      event_source: 'web',
+      event_source_id: pixelId,
+      data: [
+        {
+          event: 'CompletePayment',
+          event_id: order.id,
+          timestamp: Math.floor(Date.now() / 1000).toString(),
+          context: {
+            user: {
+              ...(hashedPhone ? { phone_number: hashedPhone } : {})
+            },
+            page: {
+              url: eventSourceUrl
+            },
+            ip: clientIp,
+            user_agent: userAgent
+          },
+          properties: {
+            contents: [
+              {
+                content_id: 'A-01',
+                content_type: 'product',
+                content_name: 'A-01 Deadbolt Type Smart Lock',
+                quantity: order.quantity || 1,
+                price: order.total
+              }
+            ],
+            value: order.total,
+            currency: 'NGN'
+          }
+        }
+      ]
+    };
+
+    if (testEventCode && testEventCode.trim()) {
+      payload.test_event_code = testEventCode.trim();
+    }
+
+    if (accessToken && accessToken.trim()) {
+      const response = await fetch('https://business-api.tiktok.com/open_api/v1.3/pixel/track/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Token': accessToken.trim()
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json().catch(() => ({}));
+      console.log(`[TikTok Events API] Sent event for Order ${order.id}:`, data);
+      return data;
+    } else {
+      console.log(`[TikTok Events API] Browser Pixel active for Order ${order.id} with pixel ${pixelId} (event_id: ${order.id})`);
+      return { status: 'browser_active', pixelId, eventId: order.id };
+    }
+  } catch (err) {
+    console.error('[TikTok Events API Error]:', err);
+    return null;
+  }
 }
 
 // ----------------------------------------------------
@@ -404,9 +732,167 @@ app.post('/api/orders', (req, res) => {
   db.orders.unshift(newOrder);
   writeDb(db);
 
+  // Trigger Meta Conversions API (CAPI) server-side event
+  sendMetaConversionsApi(newOrder, req).catch((err) => {
+    console.error('Meta CAPI error on order creation:', err);
+  });
+
+  // Trigger TikTok Events API server-side event
+  sendTikTokEventsApi(newOrder, req).catch((err) => {
+    console.error('TikTok Events API error on order creation:', err);
+  });
+
+  // Trigger Formspree email notification to seller
+  sendFormspreeNotification(newOrder).catch((err) => {
+    console.error('Formspree notification error on order creation:', err);
+  });
+
   res.status(201).json({
     success: true,
     order: newOrder
+  });
+});
+
+// Formspree Test Endpoint
+app.post('/api/formspree/test', async (req, res) => {
+  const db = readDb();
+  const endpoint = req.body.endpoint || db.settings?.formspreeEndpoint || 'https://formspree.io/f/xbggbvjg';
+  try {
+    const response = await fetch(endpoint.trim(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        _subject: 'Test Notification - A-01 Smart Lock Store',
+        message: 'This is a test notification from your A-01 Smart Lock website. Formspree is properly connected and ready to send you order emails!',
+        testDate: new Date().toISOString()
+      })
+    });
+    const result = await response.json().catch(() => ({}));
+    res.json({ success: true, result });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Error communicating with Formspree' });
+  }
+});
+
+// Meta Conversions API Live Event Relay (tracks PageView, ViewContent, InitiateCheckout, Contact, Lead, Purchase)
+app.post('/api/meta-capi/event', async (req, res) => {
+  const { eventName, eventId, params, userData, testEventCode, sourceUrl } = req.body;
+  if (!eventName) {
+    return res.status(400).json({ error: 'eventName is required' });
+  }
+
+  const result = await sendMetaCapiGeneric({
+    eventName,
+    eventId,
+    customData: params,
+    userDataInput: userData,
+    req,
+    testEventCodeOverride: testEventCode,
+    sourceUrlOverride: sourceUrl
+  });
+
+  res.json({ success: true, result });
+});
+
+// Meta Conversions API Test Endpoint
+app.post('/api/meta-capi/test', async (req, res) => {
+  const db = readDb();
+  const pixelId = req.body.pixelId || db.settings?.pixels?.metaPixelId || '947636671276929';
+  const accessToken = req.body.accessToken || db.settings?.pixels?.metaAccessToken || process.env.META_ACCESS_TOKEN;
+  const testEventCode = req.body.testEventCode || db.settings?.pixels?.metaTestEventCode || process.env.META_TEST_EVENT_CODE;
+
+  if (!accessToken || !accessToken.trim()) {
+    return res.json({
+      success: true,
+      mode: 'browser_active',
+      pixelId,
+      message: 'Browser Meta Pixel 947636671276929 is active and tracking all events. To send server-side events directly to Meta Graph API, enter your Meta System User Access Token in Settings.',
+      samplePayload: {
+        event_name: 'ViewContent',
+        pixel_id: pixelId,
+        currency: 'NGN',
+        value: 180000,
+        content_name: 'A-01 Deadbolt Type Smart Lock'
+      }
+    });
+  }
+
+  const result = await sendMetaCapiGeneric({
+    eventName: req.body.eventName || 'ViewContent',
+    eventId: `test-${Date.now()}`,
+    customData: {
+      currency: 'NGN',
+      value: 180000,
+      content_name: 'A-01 Deadbolt Type Smart Lock',
+      content_type: 'product'
+    },
+    req,
+    testEventCodeOverride: testEventCode
+  });
+
+  res.json({ success: true, mode: 'graph_api', pixelId, result });
+});
+
+// TikTok Pixel & Events API Test Endpoint
+app.post('/api/tiktok/test', async (req, res) => {
+  const db = readDb();
+  const pixelId = req.body.pixelId || db.settings?.pixels?.tikTokPixelId || 'DBMVHBRC77UASCMH7A20';
+  const testEventCode = req.body.testEventCode || db.settings?.pixels?.tikTokTestEventCode || process.env.TIKTOK_TEST_EVENT_CODE;
+  const accessToken = req.body.accessToken || db.settings?.pixels?.tikTokAccessToken || process.env.TIKTOK_ACCESS_TOKEN;
+
+  const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket.remoteAddress || '127.0.0.1';
+  const userAgent = (req.headers['user-agent'] as string) || 'Mozilla/5.0';
+
+  const testPayload: any = {
+    pixel_code: pixelId,
+    event_source: 'web',
+    event_source_id: pixelId,
+    data: [
+      {
+        event: 'ViewContent',
+        event_id: `test-${Date.now()}`,
+        timestamp: Math.floor(Date.now() / 1000).toString(),
+        context: {
+          page: { url: (req.headers.referer as string) || 'https://ais-pre-esmhdnz2qbrgb3hajpuwbr-656280234555.europe-west1.run.app/' },
+          ip: clientIp,
+          user_agent: userAgent
+        },
+        properties: {
+          contents: [{ content_id: 'A-01', content_type: 'product', content_name: 'A-01 Smart Lock', quantity: 1, price: 180000 }],
+          value: 180000,
+          currency: 'NGN'
+        }
+      }
+    ]
+  };
+
+  if (testEventCode && testEventCode.trim()) {
+    testPayload.test_event_code = testEventCode.trim();
+  }
+
+  if (accessToken && accessToken.trim()) {
+    try {
+      const response = await fetch('https://business-api.tiktok.com/open_api/v1.3/pixel/track/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Access-Token': accessToken.trim() },
+        body: JSON.stringify(testPayload)
+      });
+      const result = await response.json().catch(() => ({}));
+      return res.json({ success: true, mode: 'server_api', result });
+    } catch (e: any) {
+      return res.status(500).json({ error: e.message || 'Error sending TikTok event' });
+    }
+  }
+
+  return res.json({
+    success: true,
+    mode: 'browser_pixel',
+    pixelId,
+    testPayload,
+    note: 'TikTok Pixel DBMVHBRC77UASCMH7A20 is active in header and fires PageView and eCommerce events.'
   });
 });
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { MessageCircle } from 'lucide-react';
+import { trackEvent } from '../services/tracking';
 
 interface FloatingWhatsAppProps {
   whatsappNumber: string;
@@ -25,6 +26,14 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ whatsappNumb
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
+        onClick={() =>
+          trackEvent('Contact', {
+            method: 'Floating WhatsApp Button',
+            content_name: 'A-01 Deadbolt Type Smart Lock',
+            value: price,
+            currency: 'NGN'
+          })
+        }
         className="flex items-center gap-2.5 px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white shadow-xl shadow-emerald-950/40 hover:scale-105 active:scale-95 transition-all duration-200 border border-emerald-400/30 group"
       >
         <div className="w-5 h-5 flex items-center justify-center">

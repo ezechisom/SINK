@@ -48,13 +48,18 @@ export interface StoreSettings {
   whatsappNumber: string; // international format e.g. +2348012345678
   supportPhone: string;
   supportEmail: string;
+  formspreeEndpoint?: string; // Formspree email notification URL e.g. https://formspree.io/f/xbggbvjg
   pickupOfficeAddress: string;
   videoEmbedUrl: string; // can be YouTube, Vimeo, direct MP4 or fallback interactive demo
   videoTitle: string;
   videoDescription: string;
   pixels: {
     metaPixelId: string;
+    metaAccessToken?: string;
+    metaTestEventCode?: string;
     tikTokPixelId: string;
+    tikTokAccessToken?: string;
+    tikTokTestEventCode?: string;
     googleAnalyticsId: string;
   };
   policyText: {

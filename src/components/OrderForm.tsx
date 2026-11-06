@@ -55,6 +55,14 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   // User request: Base state delivery removed (0 nationwide!)
   const total = subtotal - discount + doorstepFee;
 
+  // Auto-switch to Doorstep Delivery when Lagos is selected (Park option removed for Lagos)
+  useEffect(() => {
+    if (isLagos && deliveryMethod === 'Motor Park Delivery') {
+      setDeliveryMethod('Doorstep Delivery');
+      setMotorParkLocation('');
+    }
+  }, [isLagos, deliveryMethod]);
+
   const handleFormInteraction = () => {
     if (!hasInteracted) {
       setHasInteracted(true);
@@ -68,11 +76,16 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 
   const handleStateChange = (newState: string) => {
     setState(newState);
-    const parks = getMotorParksForState(newState);
-    if (parks && parks.length > 0) {
-      setMotorParkLocation(parks[0]);
-    } else {
+    if (isLagosState(newState)) {
+      setDeliveryMethod('Doorstep Delivery');
       setMotorParkLocation('');
+    } else {
+      const parks = getMotorParksForState(newState);
+      if (parks && parks.length > 0) {
+        setMotorParkLocation(parks[0]);
+      } else {
+        setMotorParkLocation('');
+      }
     }
   };
 
@@ -127,14 +140,45 @@ export const OrderForm: React.FC<OrderFormProps> = ({
         notes: notes.trim() ? notes.trim() : undefined
       });
 
-      // Track confirmed purchase
-      trackEvent('Purchase', {
-        orderId: order.id,
-        value: order.total,
-        currency: 'NGN',
-        num_items: order.quantity,
-        content_name: 'A-01 Deadbolt Type Smart Lock'
-      });
+      // Track confirmed purchase with eventID for Meta CAPI deduplication
+      trackEvent(
+        'Purchase',
+        {
+          orderId: order.id,
+          value: order.total,
+          currency: 'NGN',
+          num_items: order.quantity,
+          content_name: 'A-01 Deadbolt Type Smart Lock'
+        },
+        { eventId: order.id }
+      );
+
+      // Dispatch email notification to Formspree
+      fetch('https://formspree.io/f/xbggbvjg', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `New A-01 Smart Lock Order #${order.id} - ₦${order.total.toLocaleString()} (${fullName})`,
+          orderReference: order.id,
+          customerName: fullName,
+          phoneNumber: phone,
+          deliveryMethod,
+          pickupTerminal: deliveryMethod === 'Motor Park Delivery' ? chosenTerminal : 'N/A',
+          doorstepDeliveryAddress: effectiveDeliveryAddress,
+          deliveryState: state,
+          quantity: `${quantity} unit(s)`,
+          unitPrice: `₦${order.unitPrice.toLocaleString()}`,
+          subtotal: `₦${order.subtotal.toLocaleString()}`,
+          discount: order.discount ? `-₦${order.discount.toLocaleString()}` : '₦0',
+          doorstepSurcharge: doorstepFee ? `₦${doorstepFee.toLocaleString()}` : '₦0 (FREE in Lagos / Motor Park)',
+          totalPayableOnDelivery: `₦${order.total.toLocaleString()}`,
+          customerNotes: notes.trim() || 'None',
+          orderTimestamp: new Date().toLocaleString()
+        })
+      }).catch((e) => console.log('Client Formspree dispatch:', e));
 
       onOrderSuccess(order);
     } catch (err: any) {
@@ -358,106 +402,120 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               </div>
             )}
 
-            {/* Row 3: Choose Between Motor Park or Doorstep Delivery */}
+            {/* Row 3: Delivery Method (Park option removed for Lagos per user instruction) */}
             <div>
               <div className="flex items-center justify-between mb-2.5">
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-800">
-                  Choose Delivery Method <span className="text-blue-600">*</span>
+                  {isLagos ? 'Delivery Method for Lagos' : 'Choose Delivery Method'} <span className="text-blue-600">*</span>
                 </label>
                 <span className="text-xs text-emerald-700 font-bold">
-                  Base Delivery is 100% FREE
+                  {isLagos ? 'Doorstep Delivery is 100% FREE in Lagos' : 'Base Delivery is 100% FREE'}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Motor Park Delivery */}
-                <label
-                  onClick={() => setDeliveryMethod('Motor Park Delivery')}
-                  className={`relative flex items-start gap-3.5 p-4 rounded-2xl border-2 cursor-pointer transition-all ${
-                    deliveryMethod === 'Motor Park Delivery'
-                      ? 'border-blue-600 bg-blue-50/70 ring-2 ring-blue-500/20 shadow-md'
-                      : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="deliveryMethod"
-                    value="Motor Park Delivery"
-                    checked={deliveryMethod === 'Motor Park Delivery'}
-                    onChange={() => setDeliveryMethod('Motor Park Delivery')}
-                    className="mt-1 w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
-                  />
+              {isLagos ? (
+                /* For Lagos: Park option is REMOVED! Doorstep delivery is standard & 100% FREE */
+                <div className="p-4 sm:p-5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/80 shadow-xs flex items-start gap-4">
+                  <div className="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                    <Home className="w-6 h-6" />
+                  </div>
                   <div className="flex-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
-                        <Building className="w-4 h-4 text-blue-600 shrink-0" />
-                        <span>Motor Park Delivery</span>
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <span className="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
+                        <span>Direct Doorstep Delivery</span>
                       </span>
-                      <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-200">
-                        FREE
+                      <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-300">
+                        100% FREE in Lagos
                       </span>
                     </div>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                      Safe pickup from designated major transit park/terminal in {state}.
+                    <p className="text-xs sm:text-sm text-slate-700 mt-1.5 leading-relaxed">
+                      All orders in Lagos State are delivered straight to your home, office, or project site with <strong>zero delivery charge</strong>! Simply input your address below.
                     </p>
-                    <div className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-100/70 text-blue-800 text-[11px] font-semibold">
-                      <span>✓ Standard Terminal Dispatch</span>
+                    <div className="mt-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-200/70 border border-emerald-300 text-emerald-900 text-xs font-bold">
+                      <span>✓ Free Direct Home Delivery · Payment on Delivery Available</span>
                     </div>
                   </div>
-                </label>
-
-                {/* Doorstep Delivery */}
-                <label
-                  onClick={() => setDeliveryMethod('Doorstep Delivery')}
-                  className={`relative flex items-start gap-3.5 p-4 rounded-2xl border-2 cursor-pointer transition-all ${
-                    deliveryMethod === 'Doorstep Delivery'
-                      ? 'border-blue-600 bg-blue-50/70 ring-2 ring-blue-500/20 shadow-md'
-                      : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="deliveryMethod"
-                    value="Doorstep Delivery"
-                    checked={deliveryMethod === 'Doorstep Delivery'}
-                    onChange={() => setDeliveryMethod('Doorstep Delivery')}
-                    className="mt-1 w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
-                        <Home className="w-4 h-4 text-emerald-600 shrink-0" />
-                        <span>Doorstep Delivery</span>
-                      </span>
-                      {isLagos ? (
-                        <span className="text-[11px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-300">
-                          FREE in Lagos
+                </div>
+              ) : (
+                /* For states outside Lagos: Allow choosing Motor Park (Free) or Doorstep (+₦5,000) */
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Motor Park Delivery */}
+                  <label
+                    onClick={() => setDeliveryMethod('Motor Park Delivery')}
+                    className={`relative flex items-start gap-3.5 p-4 rounded-2xl border-2 cursor-pointer transition-all ${
+                      deliveryMethod === 'Motor Park Delivery'
+                        ? 'border-blue-600 bg-blue-50/70 ring-2 ring-blue-500/20 shadow-md'
+                        : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="deliveryMethod"
+                      value="Motor Park Delivery"
+                      checked={deliveryMethod === 'Motor Park Delivery'}
+                      onChange={() => setDeliveryMethod('Motor Park Delivery')}
+                      className="mt-1 w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+                          <Building className="w-4 h-4 text-blue-600 shrink-0" />
+                          <span>Motor Park Delivery</span>
                         </span>
-                      ) : (
+                        <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-200">
+                          FREE
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                        Safe pickup from designated major transit park/terminal in {state}.
+                      </p>
+                      <div className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-100/70 text-blue-800 text-[11px] font-semibold">
+                        <span>✓ Standard Terminal Dispatch</span>
+                      </div>
+                    </div>
+                  </label>
+
+                  {/* Doorstep Delivery */}
+                  <label
+                    onClick={() => setDeliveryMethod('Doorstep Delivery')}
+                    className={`relative flex items-start gap-3.5 p-4 rounded-2xl border-2 cursor-pointer transition-all ${
+                      deliveryMethod === 'Doorstep Delivery'
+                        ? 'border-blue-600 bg-blue-50/70 ring-2 ring-blue-500/20 shadow-md'
+                        : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="deliveryMethod"
+                      value="Doorstep Delivery"
+                      checked={deliveryMethod === 'Doorstep Delivery'}
+                      onChange={() => setDeliveryMethod('Doorstep Delivery')}
+                      className="mt-1 w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">
+                          <Home className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>Doorstep Delivery</span>
+                        </span>
                         <span className="text-[11px] font-extrabold text-amber-900 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300">
                           +₦5,000 Extra
                         </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                      Direct delivery right to your residential home, office, or building construction site.
-                    </p>
-                    {isLagos ? (
-                      <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-100/80 border border-emerald-300 text-emerald-900 text-[11px] font-bold shadow-xs">
-                        <span>✅ ₦5,000 Extra Fee Waived for Lagos State!</span>
                       </div>
-                    ) : (
+                      <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                        Direct delivery right to your residential home, office, or building construction site.
+                      </p>
                       <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-100/80 border border-amber-300 text-amber-900 text-[11px] font-bold shadow-xs">
                         <span>⚠️ Attracts extra fee of ₦5,000</span>
                       </div>
-                    )}
-                  </div>
-                </label>
-              </div>
+                    </div>
+                  </label>
+                </div>
+              )}
             </div>
 
-            {/* Motor Park Specific Options when Motor Park Delivery is selected */}
-            {deliveryMethod === 'Motor Park Delivery' && (
+            {/* Motor Park Specific Options when Motor Park Delivery is selected (non-Lagos only) */}
+            {!isLagos && deliveryMethod === 'Motor Park Delivery' && (
               <div className="p-4 sm:p-5 rounded-2xl bg-blue-50/60 border-2 border-blue-200 space-y-3">
                 <div className="flex items-center justify-between gap-2">
                   <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">

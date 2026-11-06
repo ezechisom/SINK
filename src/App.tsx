@@ -17,6 +17,7 @@ import { FloatingReview } from './components/FloatingReview';
 import { MobileStickyBar } from './components/MobileStickyBar';
 import { AdminDashboard } from './components/AdminDashboard';
 import { CookieBanner } from './components/CookieBanner';
+import { QuickOrderModal } from './components/QuickOrderModal';
 
 // Fallback initial config matching the required ₦180,000 price & reference specs
 const initialFallbackConfig: PublicConfig = {
@@ -29,13 +30,16 @@ const initialFallbackConfig: PublicConfig = {
     whatsappNumber: '+2348147778029',
     supportPhone: '08147778029',
     supportEmail: 'orders@smartlock.ng',
+    formspreeEndpoint: 'https://formspree.io/f/xbggbvjg',
     pickupOfficeAddress: 'Plot 14 Admiralty Way, Lekki Phase 1, Lagos, Nigeria',
     videoEmbedUrl: '',
     videoTitle: 'A-01 Deadbolt Smart Lock Operational & Feature Showcase',
     videoDescription: 'Watch 3D Face Recognition Cat-Eye Camera, Semiconductor Biometric Fingerprint, 4.0-Inch Interior IPS Screen, Virtual Passcode, and Tuya App remote unlock in action.',
     pixels: {
       metaPixelId: '947636671276929',
-      tikTokPixelId: 'DB2I7I3C77UA626EHF30',
+      metaAccessToken: '',
+      metaTestEventCode: '',
+      tikTokPixelId: 'DBMVHBRC77UASCMH7A20',
       googleAnalyticsId: ''
     },
     policyText: {
@@ -61,7 +65,7 @@ const initialFallbackConfig: PublicConfig = {
         },
         {
           question: '5. How does delivery work across Nigeria?',
-          answer: 'We deliver nationwide across all 36 states and the FCT. Base delivery is FREE nationwide! If you choose Motor Park Delivery, it is 100% FREE and requires no street address — simply pick your preferred transit terminal. In Lagos State, Doorstep Delivery is completely FREE (no extra fee). In other states, Doorstep Delivery attracts an extra fee of ₦5,000. Plus, enjoy an instant ₦5,000 discount for every additional lock ordered!'
+          answer: 'We deliver nationwide across Nigeria. For Lagos State, orders enjoy direct Doorstep Delivery straight to your home or office 100% FREE. For other states outside Lagos, you can choose 100% FREE Motor Park Delivery to your designated transit terminal (no street address required), or Doorstep Delivery for a ₦5,000 surcharge. Plus, enjoy an instant ₦5,000 discount for every additional lock ordered!'
         },
         {
           question: '6. Can I generate temporary passcodes for guests or cleaners?',
@@ -117,26 +121,56 @@ const initialFallbackConfig: PublicConfig = {
     {
       id: 'img-master-poster',
       url: '/public/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png',
-      title: 'A-01 Deadbolt Smart Lock Official Showcase',
-      subtitle: 'Complete front and interior panel display with 3D Face Recognition, 4.0-inch screen, and Tuya Smart connectivity'
+      title: 'A-01 Smart Access Master Showcase',
+      subtitle: 'Official presentation featuring the ₦180,000 promo price, 3D Face Recognition, and 4.0-inch Interior Screen'
     },
     {
-      id: 'img-door-installed',
-      url: '/images/smart_lock_door_1793893094297.jpg',
-      title: 'Luxury Apartment Door Installation',
-      subtitle: 'Sleek black finish with illuminated numeric touch keypad, round face camera, and deadbolt handle'
+      id: 'img-video-intercom',
+      url: '/public/assets/aistudio/image_d0f1a489.png',
+      title: 'Video Intercom & 3D Face Recognition',
+      subtitle: 'Active monitoring video intercom, 3D face recognition cat-eye camera, and Tuya Smart Mobile App integration'
     },
     {
-      id: 'img-interior-screen',
-      url: '/images/smart_lock_screen_1793893110263.jpg',
-      title: '4.0-Inch Interior HD Color Screen',
-      subtitle: 'See live video of visitors outside, quick-open safety handle, and mechanical anti-lock knob'
+      id: 'img-fingerprint-05s',
+      url: '/public/assets/aistudio/image_3e43ad8c.png',
+      title: 'Semiconductor Fingerprint 0.5s Unlock',
+      subtitle: 'Ultra-fast 0.5-second biometric sensor, 99.99% recognition accuracy, and 0.01% false rejection rate'
     },
     {
-      id: 'img-face-scan',
-      url: '/images/smart_lock_face_scan_1793893126016.jpg',
-      title: 'Instant 3D Infrared Face Recognition',
-      subtitle: 'Hands-free biometric unlocking in under 0.5 seconds with advanced infrared cat-eye camera'
+      id: 'img-privacy-password',
+      url: '/public/assets/aistudio/image_59eea695.png',
+      title: 'Anti-Peep Virtual Privacy Password',
+      subtitle: 'Enter random fake PIN digits before or after your real password to protect against shoulder-surfing'
+    },
+    {
+      id: 'img-multi-access-methods',
+      url: '/public/assets/aistudio/image_aa3a96c0.png',
+      title: '6-in-1 Multi-Access Smart Unlocking',
+      subtitle: 'Unlock via 3D Face, Biometric Fingerprint, Encrypted IC Card, Virtual Password, Mechanical Key, or Phone App'
+    },
+    {
+      id: 'img-parameters-anatomy',
+      url: '/public/assets/aistudio/image_d9b7f963.png',
+      title: 'Technical Parameters & Anatomy Architecture',
+      subtitle: 'Comprehensive breakdown of front and interior panel components, emergency ports, sensors, and safety handles'
+    },
+    {
+      id: 'img-endurance-battery',
+      url: '/public/assets/aistudio/image_2cf67039.png',
+      title: 'Long Endurance Rechargeable Battery & Screen',
+      subtitle: 'High-capacity lithium battery lasting 3–5 months per charge with built-in interior color monitor'
+    },
+    {
+      id: 'img-product-package-list',
+      url: '/public/assets/aistudio/image_1fd68c2a.png',
+      title: 'Complete Box Hardware Package & Inclusions',
+      subtitle: 'Front & rear panels, heavy-duty multi-bolt lock body, 2 keys, 2 magnetic IC cards, USB cable, screws & templates'
+    },
+    {
+      id: 'img-mortise-dimensions',
+      url: '/public/assets/aistudio/image_61bdf854.png',
+      title: 'Heavy-Duty Security Mortise Dimensions (24*240)',
+      subtitle: 'Industrial-grade multi-bolt stainless steel lock body with 240mm faceplate for standard Nigerian security doors'
     }
   ],
   reviews: [
@@ -192,6 +226,25 @@ export default function App() {
   const [nigerianStates, setNigerianStates] = useState<string[]>(NIGERIAN_STATES);
   const [confirmedOrder, setConfirmedOrder] = useState<Order | null>(null);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
+  const [hasOrdered, setHasOrdered] = useState(false);
+
+  // User request: Quick Order Form that pops up every 45 seconds a customer stays on the site
+  useEffect(() => {
+    if (hasOrdered) return;
+
+    const interval = setInterval(() => {
+      setIsQuickOrderOpen((prev) => {
+        // If not already open, customer has not ordered, and admin is not open, show popup
+        if (!prev && !hasOrdered && !isAdminOpen) {
+          return true;
+        }
+        return prev;
+      });
+    }, 45000);
+
+    return () => clearInterval(interval);
+  }, [hasOrdered, isAdminOpen]);
 
   const loadConfig = async () => {
     try {
@@ -217,6 +270,12 @@ export default function App() {
   }, []);
 
   const scrollToOrderForm = () => {
+    trackEvent('InitiateCheckout', {
+      content_name: 'A-01 Deadbolt Type Smart Lock',
+      currency: 'NGN',
+      value: sellingPrice,
+      num_items: 1
+    });
     const el = document.getElementById('order-form');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -246,8 +305,10 @@ export default function App() {
           heroImage={heroImage}
         />
 
-        {/* 3. Product Gallery */}
-        <ProductGallery images={config.galleryImages} />
+        {/* 3. Dedicated High-Definition Photo Gallery */}
+        <ProductGallery
+          images={config.galleryImages}
+        />
 
         {/* 4. Product Benefits Section */}
         <Benefits />
@@ -277,7 +338,10 @@ export default function App() {
           price={sellingPrice}
           deliveryFees={config.deliveryFees}
           nigerianStates={nigerianStates}
-          onOrderSuccess={(order) => setConfirmedOrder(order)}
+          onOrderSuccess={(order) => {
+            setHasOrdered(true);
+            setConfirmedOrder(order);
+          }}
         />
 
         {/* 9. FAQ & Trust Section */}
@@ -308,7 +372,22 @@ export default function App() {
         />
       )}
 
-      {/* 14. Secure Admin Dashboard */}
+      {/* 14. Quick Order Modal (pops up every 45s, auto-closes in 15s if not filled) */}
+      <QuickOrderModal
+        isOpen={isQuickOrderOpen}
+        onClose={() => setIsQuickOrderOpen(false)}
+        price={sellingPrice}
+        nigerianStates={nigerianStates}
+        deliveryFees={config.deliveryFees}
+        formspreeEndpoint={config.settings.formspreeEndpoint}
+        onOrderSuccess={(order) => {
+          setHasOrdered(true);
+          setConfirmedOrder(order);
+          setIsQuickOrderOpen(false);
+        }}
+      />
+
+      {/* 15. Secure Admin Dashboard */}
       <AdminDashboard
         isOpen={isAdminOpen}
         onClose={() => setIsAdminOpen(false)}
@@ -316,7 +395,7 @@ export default function App() {
         onConfigUpdated={loadConfig}
       />
 
-      {/* 15. Cookie Consent Notice */}
+      {/* 16. Cookie Consent Notice */}
       <CookieBanner />
     </div>
   );

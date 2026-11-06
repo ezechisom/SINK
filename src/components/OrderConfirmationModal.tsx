@@ -166,6 +166,16 @@ export const OrderConfirmationModal: React.FC<OrderConfirmationModalProps> = ({
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => {
+              if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+                window.fbq('track', 'Contact', {
+                  content_name: 'A-01 Deadbolt Type Smart Lock',
+                  order_id: order.id,
+                  value: order.total,
+                  currency: 'NGN'
+                });
+              }
+            }}
             className="action-glow flex-1 flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm tracking-wide shadow-lg shadow-emerald-600/25 active:scale-[0.98] transition-all text-center cursor-pointer"
           >
             <MessageCircle className="w-5 h-5 fill-current" />

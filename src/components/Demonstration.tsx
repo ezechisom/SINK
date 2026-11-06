@@ -25,55 +25,61 @@ export const Demonstration: React.FC<DemonstrationProps> = ({
       id: 'face' as const,
       name: '3D Face Recognition',
       icon: Eye,
-      tag: '<0.5s Fast Face Scan',
-      headline: '3D Infrared Cat-Eye Camera Facial Biometrics',
-      description: 'Hands-free entry even when holding groceries. Uses dual infrared depth sensors to map 30,000 biometric facial coordinates. Works flawlessly in complete pitch darkness, resists photo/video spoofing, and recognizes you with hats or glasses in 0.5 seconds.',
+      image: '/public/assets/aistudio/image_d0f1a489.png',
+      tag: '<0.5s Video Intercom Scan',
+      headline: '3D Infrared Cat-Eye Camera & Active Video Intercom',
+      description: 'Hands-free entry even when holding groceries. Uses dual infrared depth sensors to map 30,000 biometric facial coordinates. Works in complete darkness, resists photo/video spoofing, and includes active two-way video intercom with Tuya Smart App.',
       statusMsg: 'SCANNING... FACIAL MATCH 99.8% · ACCESS GRANTED'
     },
     {
       id: 'screen' as const,
       name: '4.0" Interior Screen',
       icon: Smartphone,
-      tag: 'Real-time Visitor Peep',
-      headline: '4.0-Inch HD IPS Color Interior Monitor',
-      description: 'Never open the door blind again. The inside panel features a built-in 4.0-inch high-resolution IPS display that automatically wakes up when visitors approach or press the doorbell, giving children and elders instant visual confirmation before opening.',
-      statusMsg: 'VISITOR AT FRONT DOOR · 4.0" HD SCREEN ACTIVE'
+      image: '/public/assets/aistudio/image_2cf67039.png',
+      tag: 'Long Endurance Lithium',
+      headline: 'Long Endurance Rechargeable Battery & 4.0" Interior Monitor',
+      description: 'Durable, assured quality built for peace of mind. The heavy-duty rechargeable lithium battery compartment lasts 3 to 5 months on a single full charge. The interior panel features a built-in HD display giving family members visual confirmation of visitors outside.',
+      statusMsg: 'BATTERY NORMAL (3-5 MONTHS) · 4.0" HD SCREEN ACTIVE'
     },
     {
       id: 'fingerprint' as const,
       name: 'Semiconductor Fingerprint',
       icon: Fingerprint,
-      tag: '0.3s 360° Biometric Read',
-      headline: 'Ultra-Sensitive Semiconductor Biometric Sensor',
-      description: 'Integrated directly into the front panel with an ergonomic grip. Advanced living-body dermal layer detection recognizes genuine human fingerprints in 0.3 seconds at any angle (360°), even with wet, dry, or aging fingers. Stores up to 100 fingerprints.',
-      statusMsg: 'BIOMETRIC SENSOR 0.3S · UNLOCKED INSTANTLY'
+      image: '/public/assets/aistudio/image_3e43ad8c.png',
+      tag: '0.5s Ultra-Fast Unlock',
+      headline: 'Semiconductor Fingerprint 0.5 Seconds to Unlock (99.99%)',
+      description: 'The 3D semiconductor fingerprint sensor is 21% higher than traditional fingerprint locks. Instant 0.5-second unlock speed with a 99.99% biometric recognition rate and an ultra-low 0.01% false rejection rate.',
+      statusMsg: 'BIOMETRIC 0.5S UNLOCK · 99.99% MATCH · ACCESS GRANTED'
     },
     {
       id: 'app' as const,
-      name: 'Tuya Mobile App Control',
+      name: '6-in-1 Multi-Access',
       icon: Sliders,
-      tag: 'Smart Remote Access',
-      headline: 'Global Remote Management via Tuya Smart / Smart Life',
-      description: 'Connects directly to your WiFi. Approve remote unlock requests from anywhere in the world, create temporary one-time passwords for Airbnb guests or visiting relatives, and monitor real-time date and time unlock logs on your smartphone.',
-      statusMsg: 'TUYA SMART CONNECTED · 1-TIME GUEST PASSCODE CREATED'
+      image: '/public/assets/aistudio/image_aa3a96c0.png',
+      tag: 'Multi-Method Access',
+      headline: '6-in-1 Multi-Access Methods & Tuya Smartphone Remote Unlock',
+      description: 'Unlock your way: 3D Face Recognition, Semiconductor Fingerprint, Encrypted IC Card, Virtual Password, Concealed Mechanical Key, or Remote Unlock Request via Tuya Smartphone App from anywhere in the world.',
+      statusMsg: 'TUYA SMART CONNECTED · 6-IN-1 ACCESS READY'
     },
     {
       id: 'doorbell' as const,
-      name: 'One-Click Doorbell',
-      icon: Bell,
-      tag: 'Built-in Smart Chime',
-      headline: 'Integrated Front Doorbell + Push Notifications',
-      description: 'No need to purchase or wire a separate doorbell. A crisp illuminated bell icon on the exterior touch keypad triggers both a loud chime on the interior unit and an instant push alert with visitor snapshot to your phone.',
-      statusMsg: 'DING-DONG! DOORBELL RUNG · INTERIOR CHIME TRIGGERED'
+      name: 'Privacy Scramble Password',
+      icon: Lock,
+      image: '/public/assets/aistudio/image_59eea695.png',
+      tag: 'Virtual Anti-Peep PIN',
+      headline: 'Privacy Password Anti-Peep Keypad Technology',
+      description: 'Defeat onlookers and shoulder-surfing completely. Type random fake numbers before or after your actual password (Fake-PIN + Real Password + Fake-PIN)—as long as a continuous correct sequence is entered, the door opens securely.',
+      statusMsg: 'VIRTUAL FAKE PIN ACTIVE · PRIVACY SECURED'
     },
     {
       id: 'emergency' as const,
-      name: 'Emergency Backup',
-      icon: BatteryCharging,
-      tag: 'Dual Fail-Safe',
-      headline: 'External Type-C Port + Concealed Mechanical Keys',
-      description: 'Zero chance of being locked out. If the rechargeable battery ever runs out after 6–8 months, jumpstart the lock in seconds using any portable power bank via the bottom Type-C port, or unlock mechanically with the 2 laser-cut physical override keys.',
-      statusMsg: 'TYPE-C EMERGENCY POWER READY · 2X MANUAL KEYS INCLUDED'
+      name: 'Hardware Package & Backup',
+      icon: KeyRound,
+      image: '/public/assets/aistudio/image_1fd68c2a.png',
+      tag: 'Complete Box Inclusions',
+      headline: 'Complete Hardware Package, Emergency Keys & Dual Power',
+      description: 'Every set arrives complete with front & rear panels, heavy-duty multi-bolt lock body, 2 laser-cut override keys, 2 magnetic IC cards, USB charging cable, screw fittings, and full cutout template. Never get locked out.',
+      statusMsg: 'COMPLETE HARDWARE SET · 2X MANUAL KEYS INCLUDED'
     }
   ];
 
@@ -175,9 +181,9 @@ export const Demonstration: React.FC<DemonstrationProps> = ({
                 {/* Visual Canvas */}
                 <div className="lg:col-span-7 relative aspect-[4/3] sm:aspect-[16/10] bg-slate-950 overflow-hidden flex items-center justify-center p-4">
                   <img
-                    src={posterImage}
-                    alt={videoTitle}
-                    className="w-full h-full object-contain transition-all duration-700"
+                    src={currentFeature.image || posterImage}
+                    alt={currentFeature.headline}
+                    className="w-full h-full object-contain transition-all duration-500"
                     referrerPolicy="no-referrer"
                   />
 
