@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Eye, Smartphone, Fingerprint, Bell, ShieldAlert, KeyRound, CheckCircle2, ShoppingBag, Lock, Sliders, BatteryCharging, Shield, Sparkles } from 'lucide-react';
+import { Eye, Smartphone, Fingerprint, Bell, ShieldAlert, KeyRound, CheckCircle2, ShoppingBag, Lock, Sliders, BatteryCharging, Shield, Sparkles, Hand } from 'lucide-react';
+import { resolveImageUrl, handleImageFallback } from '../utils/imageHelper';
 
 interface DemonstrationProps {
   videoEmbedUrl?: string;
@@ -18,14 +19,24 @@ export const Demonstration: React.FC<DemonstrationProps> = ({
   onOrderClick,
   posterImage
 }) => {
-  const [activeTab, setActiveTab] = useState<'face' | 'screen' | 'fingerprint' | 'app' | 'doorbell' | 'emergency'>('face');
+  const [activeTab, setActiveTab] = useState<'palm' | 'face' | 'screen' | 'fingerprint' | 'app' | 'doorbell' | 'emergency'>('palm');
 
   const demoFeatures = [
+    {
+      id: 'palm' as const,
+      name: 'Palm Vein Biometrics',
+      icon: Hand,
+      image: '/assets/aistudio/image_42d449af.png',
+      tag: 'Touchless Palm Vein <0.5s',
+      headline: 'Contactless Infrared Palm Vein Vascular Biometrics',
+      description: 'The pinnacle of biometric authentication. Emits safe near-infrared light to identify unique subcutaneous vascular vein patterns under the palm surface. Touchless, hygienic (5–10cm hover), and 100% anti-spoofing.',
+      statusMsg: 'SCANNING PALM VEIN... VASCULAR MATCH 99.999% · ACCESS GRANTED'
+    },
     {
       id: 'face' as const,
       name: '3D Face Recognition',
       icon: Eye,
-      image: '/public/assets/aistudio/image_d0f1a489.png',
+      image: '/assets/aistudio/image_d0f1a489.png',
       tag: '<0.5s Video Intercom Scan',
       headline: '3D Infrared Cat-Eye Camera & Active Video Intercom',
       description: 'Hands-free entry even when holding groceries. Uses dual infrared depth sensors to map 30,000 biometric facial coordinates. Works in complete darkness, resists photo/video spoofing, and includes active two-way video intercom with Tuya Smart App.',
@@ -35,7 +46,7 @@ export const Demonstration: React.FC<DemonstrationProps> = ({
       id: 'screen' as const,
       name: '4.0" Interior Screen',
       icon: Smartphone,
-      image: '/public/assets/aistudio/image_2cf67039.png',
+      image: '/assets/aistudio/image_2cf67039.png',
       tag: 'Long Endurance Lithium',
       headline: 'Long Endurance Rechargeable Battery & 4.0" Interior Monitor',
       description: 'Durable, assured quality built for peace of mind. The heavy-duty rechargeable lithium battery compartment lasts 3 to 5 months on a single full charge. The interior panel features a built-in HD display giving family members visual confirmation of visitors outside.',
@@ -45,7 +56,7 @@ export const Demonstration: React.FC<DemonstrationProps> = ({
       id: 'fingerprint' as const,
       name: 'Semiconductor Fingerprint',
       icon: Fingerprint,
-      image: '/public/assets/aistudio/image_3e43ad8c.png',
+      image: '/assets/aistudio/image_3e43ad8c.png',
       tag: '0.5s Ultra-Fast Unlock',
       headline: 'Semiconductor Fingerprint 0.5 Seconds to Unlock (99.99%)',
       description: 'The 3D semiconductor fingerprint sensor is 21% higher than traditional fingerprint locks. Instant 0.5-second unlock speed with a 99.99% biometric recognition rate and an ultra-low 0.01% false rejection rate.',
@@ -53,19 +64,19 @@ export const Demonstration: React.FC<DemonstrationProps> = ({
     },
     {
       id: 'app' as const,
-      name: '6-in-1 Multi-Access',
+      name: 'Multiple Unlocking',
       icon: Sliders,
-      image: '/public/assets/aistudio/image_aa3a96c0.png',
+      image: '/assets/aistudio/image_42d449af.png',
       tag: 'Multi-Method Access',
-      headline: '6-in-1 Multi-Access Methods & Tuya Smartphone Remote Unlock',
-      description: 'Unlock your way: 3D Face Recognition, Semiconductor Fingerprint, Encrypted IC Card, Virtual Password, Concealed Mechanical Key, or Remote Unlock Request via Tuya Smartphone App from anywhere in the world.',
-      statusMsg: 'TUYA SMART CONNECTED · 6-IN-1 ACCESS READY'
+      headline: 'Multiple Unlocking Methods: Face, Palm Vein, Fingerprint & App',
+      description: 'Unlock your way: 3D Face Recognition, Palm Vein sensor, Semiconductor Fingerprint, Password, NFC Smart Card, Key Unlock, Combination Unlock, or Tuya Smartphone Remote Unlock from anywhere in the world.',
+      statusMsg: 'MULTIPLE ACCESS METHODS READY · PALM VEIN & FACE ACTIVE'
     },
     {
       id: 'doorbell' as const,
       name: 'Privacy Scramble Password',
       icon: Lock,
-      image: '/public/assets/aistudio/image_59eea695.png',
+      image: '/assets/aistudio/image_59eea695.png',
       tag: 'Virtual Anti-Peep PIN',
       headline: 'Privacy Password Anti-Peep Keypad Technology',
       description: 'Defeat onlookers and shoulder-surfing completely. Type random fake numbers before or after your actual password (Fake-PIN + Real Password + Fake-PIN)—as long as a continuous correct sequence is entered, the door opens securely.',
@@ -75,7 +86,7 @@ export const Demonstration: React.FC<DemonstrationProps> = ({
       id: 'emergency' as const,
       name: 'Hardware Package & Backup',
       icon: KeyRound,
-      image: '/public/assets/aistudio/image_1fd68c2a.png',
+      image: '/assets/aistudio/image_1fd68c2a.png',
       tag: 'Complete Box Inclusions',
       headline: 'Complete Hardware Package, Emergency Keys & Dual Power',
       description: 'Every set arrives complete with front & rear panels, heavy-duty multi-bolt lock body, 2 laser-cut override keys, 2 magnetic IC cards, USB charging cable, screw fittings, and full cutout template. Never get locked out.',
@@ -163,13 +174,13 @@ export const Demonstration: React.FC<DemonstrationProps> = ({
                       key={feat.id}
                       type="button"
                       onClick={() => setActiveTab(feat.id)}
-                      className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                      className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                         isActive
                           ? 'bg-gradient-to-r from-blue-600 to-emerald-600 text-white shadow-lg shadow-blue-500/20 border border-blue-400/50'
                           : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'
                       }`}
                     >
-                      <Icon className="w-4 h-4" />
+                      <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                       <span>{feat.name}</span>
                     </button>
                   );
@@ -181,10 +192,11 @@ export const Demonstration: React.FC<DemonstrationProps> = ({
                 {/* Visual Canvas */}
                 <div className="lg:col-span-7 relative aspect-[4/3] sm:aspect-[16/10] bg-slate-950 overflow-hidden flex items-center justify-center p-4">
                   <img
-                    src={currentFeature.image || posterImage}
+                    src={resolveImageUrl(currentFeature.image || posterImage)}
                     alt={currentFeature.headline}
                     className="w-full h-full object-contain transition-all duration-500"
                     referrerPolicy="no-referrer"
+                    onError={handleImageFallback}
                   />
 
                   {/* High-Tech HUD Simulation Overlay */}

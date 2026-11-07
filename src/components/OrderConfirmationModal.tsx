@@ -46,8 +46,8 @@ export const OrderConfirmationModal: React.FC<OrderConfirmationModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white border-2 border-blue-200 rounded-3xl p-6 sm:p-8 shadow-2xl text-left my-8">
+    <div className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white border-2 border-blue-200 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl text-left my-4 sm:my-8">
         {/* Close Button */}
         <button
           onClick={onClose}

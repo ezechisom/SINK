@@ -15,12 +15,14 @@ interface OrderFormProps {
   deliveryFees: DeliveryFeesMap;
   nigerianStates: string[];
   onOrderSuccess: (order: Order) => void;
+  onFormInteraction?: (isInteracting: boolean) => void;
 }
 
 export const OrderForm: React.FC<OrderFormProps> = ({
   price,
   nigerianStates,
-  onOrderSuccess
+  onOrderSuccess,
+  onFormInteraction
 }) => {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -38,6 +40,11 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   // Available motor parks for selected state
   const availableMotorParks = React.useMemo(() => getMotorParksForState(state), [state]);
 
+  // Notify parent component that customer is filling out the main form
+  const notifyFilling = () => {
+    onFormInteraction?.(true);
+  };
+
   // Auto-sync motor park when state changes
   useEffect(() => {
     if (availableMotorParks && availableMotorParks.length > 0) {
@@ -52,7 +59,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   const discount = calculateMultiUnitDiscount(quantity);
   const isLagos = isLagosState(state);
   const doorstepFee = calculateDoorstepFee(state, deliveryMethod);
-  // User request: Base state delivery removed (0 nationwide!)
+  // Base delivery is 100% free nationwide
   const total = subtotal - discount + doorstepFee;
 
   // Auto-switch to Doorstep Delivery when Lagos is selected (Park option removed for Lagos)
@@ -64,6 +71,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   }, [isLagos, deliveryMethod]);
 
   const handleFormInteraction = () => {
+    notifyFilling();
     if (!hasInteracted) {
       setHasInteracted(true);
       trackEvent('InitiateCheckout', {
@@ -75,6 +83,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   };
 
   const handleStateChange = (newState: string) => {
+    notifyFilling();
     setState(newState);
     if (isLagosState(newState)) {
       setDeliveryMethod('Doorstep Delivery');
@@ -92,28 +101,32 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    notifyFilling();
 
     // Validation
     if (!fullName.trim()) {
       setErrorMessage('Please enter your full name.');
       return;
     }
-    if (!phone.trim() || phone.trim().length < 8) {
+
+    const sanitizedPhone = phone.replace(/[\s\-\(\)\.]/g, '');
+    if (!sanitizedPhone || sanitizedPhone.length < 8) {
       setErrorMessage('Please enter a valid Nigerian telephone number (e.g., 08012345678).');
       return;
     }
+
     if (!state.trim()) {
       setErrorMessage('Please select your delivery state.');
       return;
     }
+
     if (deliveryMethod === 'Motor Park Delivery' && availableMotorParks && availableMotorParks.length > 0 && !motorParkLocation) {
-      setErrorMessage(`Please select your preferred motor park terminal in ${state}.`);
-      return;
+      setMotorParkLocation(availableMotorParks[0]);
     }
 
-    // Street address is ONLY required when Doorstep Delivery is chosen
+    // Street address is required when Doorstep Delivery is chosen
     if (deliveryMethod === 'Doorstep Delivery') {
-      if (!deliveryAddress.trim() || deliveryAddress.trim().length < 5) {
+      if (!deliveryAddress.trim() || deliveryAddress.trim().length < 3) {
         setErrorMessage(`Please enter your complete doorstep delivery address in ${state}.`);
         return;
       }
@@ -128,9 +141,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 
     try {
       const order = await submitOrder({
-        fullName,
-        phone,
-        state,
+        fullName: fullName.trim(),
+        phone: sanitizedPhone,
+        whatsapp: sanitizedPhone,
+        state: state.trim(),
         deliveryMethod,
         motorParkLocation: deliveryMethod === 'Motor Park Delivery' ? chosenTerminal : undefined,
         doorstepFee,
@@ -208,9 +222,9 @@ export const OrderForm: React.FC<OrderFormProps> = ({
         </div>
 
         {/* Order Card Container */}
-        <div className="bg-white border-2 border-blue-200 rounded-3xl p-6 sm:p-10 shadow-xl shadow-blue-500/5 text-left">
+        <div className="bg-white border-2 border-blue-200 rounded-2xl sm:rounded-3xl p-4 sm:p-10 shadow-xl shadow-blue-500/5 text-left">
           {/* Product Summary Header inside form */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-blue-50/70 border border-blue-200 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-3.5 sm:p-5 rounded-2xl bg-blue-50/70 border border-blue-200 mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
             <div>
               <span className="text-xs uppercase tracking-wider text-blue-700 font-bold block">
                 Selected Product
@@ -250,7 +264,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                   required
                   placeholder="e.g. Babatunde Adeleke"
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => {
+                    notifyFilling();
+                    setFullName(e.target.value);
+                  }}
                   className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors"
                 />
               </div>
@@ -264,7 +281,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                   required
                   placeholder="e.g. 0801 234 5678"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    notifyFilling();
+                    setPhone(e.target.value);
+                  }}
                   className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors"
                 />
               </div>
@@ -528,7 +548,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5">
                   {availableMotorParks.map((park) => {
                     const isSelected = motorParkLocation === park;
                     return (
@@ -588,7 +608,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                   rows={3}
                   placeholder={`House/flat number, street name, estate, nearest landmark in ${state}...`}
                   value={deliveryAddress}
-                  onChange={(e) => setDeliveryAddress(e.target.value)}
+                  onChange={(e) => {
+                    notifyFilling();
+                    setDeliveryAddress(e.target.value);
+                  }}
                   className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors resize-none"
                 />
               </div>
@@ -603,7 +626,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                 type="text"
                 placeholder="e.g. Call before dispatch, alternative phone number or plumber details..."
                 value={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                onChange={(e) => {
+                  notifyFilling();
+                  setNotes(e.target.value);
+                }}
                 className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors"
               />
             </div>
@@ -676,8 +702,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                 </div>
               )}
 
-              <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
-                <span className="font-extrabold text-slate-900 text-base">Estimated Total Payable on Delivery:</span>
+              <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
+                <span className="font-extrabold text-slate-900 text-sm sm:text-base">Estimated Total Payable on Delivery:</span>
                 <span className="font-['Outfit'] text-2xl sm:text-3xl font-extrabold text-blue-600 tabular-nums">
                   ₦{total.toLocaleString()}
                 </span>
@@ -688,9 +714,9 @@ export const OrderForm: React.FC<OrderFormProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="action-glow w-full py-4 px-6 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-extrabold text-base tracking-wide shadow-xl active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 cursor-pointer"
+              className="action-glow w-full py-3.5 sm:py-4 px-4 sm:px-6 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-extrabold text-sm sm:text-base tracking-wide shadow-xl active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer text-center"
             >
-              <ShoppingBag className="w-5 h-5 text-white" />
+              <ShoppingBag className="w-5 h-5 text-white shrink-0" />
               <span>
                 {isSubmitting
                   ? 'PROCESSING YOUR ORDER...'

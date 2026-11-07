@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Clock, ShoppingBag, ShieldCheck, CheckCircle2, AlertCircle, Truck, MapPin, Building, Home, Sparkles } from 'lucide-react';
-import { Order, DeliveryFeesMap } from '../types';
+import { X, Clock, ShoppingBag, ShieldCheck, CheckCircle2, AlertCircle, Truck, MapPin, Building, Home, Sparkles, ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
+import { Order, DeliveryFeesMap, PublicConfig } from '../types';
 import { submitOrder } from '../services/api';
 import { trackEvent } from '../services/tracking';
+import { resolveImageUrl, handleImageFallback } from '../utils/imageHelper';
 import {
   getMotorParksForState,
   isLagosState,
@@ -17,6 +18,7 @@ interface QuickOrderModalProps {
   nigerianStates: string[];
   deliveryFees?: DeliveryFeesMap;
   formspreeEndpoint?: string;
+  images?: PublicConfig['galleryImages'];
   onOrderSuccess: (order: Order) => void;
 }
 
@@ -26,6 +28,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
   price,
   nigerianStates,
   formspreeEndpoint = 'https://formspree.io/f/xbggbvjg',
+  images = [],
   onOrderSuccess
 }) => {
   const [fullName, setFullName] = useState('');
@@ -40,10 +43,31 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Slideshow state for Quick Order Form
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [isSlideshowPlaying, setIsSlideshowPlaying] = useState(true);
+
   // 15-second countdown timer when opened
   const [secondsLeft, setSecondsLeft] = useState(15);
   const [isInteracting, setIsInteracting] = useState(false);
   const isFillingRef = useRef(false);
+
+  // Fallback slides if none provided
+  const modalSlides = images && images.length > 0 ? images : [
+    { id: 'img-1', url: '/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png', title: 'A-01 Smart Lock Master Presentation', subtitle: '₦180,000 Promo Price with 3D Face Recognition' },
+    { id: 'img-2', url: '/assets/aistudio/image_42d449af.png', title: 'Multiple Unlocking Methods', subtitle: 'Palm Vein, 3D Face, Fingerprint, NFC & Passcode' },
+    { id: 'img-3', url: '/assets/aistudio/image_d0f1a489.png', title: 'Video Intercom & 3D Face Scan', subtitle: 'Cat-eye infrared camera & Tuya App intercom' },
+    { id: 'img-4', url: '/assets/aistudio/image_3e43ad8c.png', title: '0.5s Semiconductor Fingerprint', subtitle: '99.99% high-accuracy biometric unlock' }
+  ];
+
+  // Auto-advance slideshow every 3 seconds
+  useEffect(() => {
+    if (!isOpen || modalSlides.length <= 1 || !isSlideshowPlaying) return;
+    const interval = setInterval(() => {
+      setSlideIndex((prev) => (prev + 1) % modalSlides.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isOpen, modalSlides.length, isSlideshowPlaying]);
 
   // Available motor parks for selected state
   const availableMotorParks = React.useMemo(() => getMotorParksForState(state), [state]);
@@ -149,8 +173,9 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
       setErrorMessage('Please enter your full name');
       return;
     }
-    if (!phone.trim()) {
-      setErrorMessage('Please enter your phone number');
+    const sanitizedPhone = phone.replace(/[\s\-\(\)\.]/g, '');
+    if (!sanitizedPhone || sanitizedPhone.length < 8) {
+      setErrorMessage('Please enter a valid Nigerian phone number');
       return;
     }
 
@@ -169,7 +194,8 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
     try {
       const order = await submitOrder({
         fullName: fullName.trim(),
-        phone: phone.trim(),
+        phone: sanitizedPhone,
+        whatsapp: sanitizedPhone,
         state,
         deliveryMethod,
         motorParkLocation: deliveryMethod === 'Motor Park Delivery' ? chosenTerminal : undefined,
@@ -235,35 +261,35 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="quick-order-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto animate-fadeIn"
     >
       <div
-        className="relative w-full max-w-lg bg-slate-900 border-2 border-emerald-500/70 rounded-3xl shadow-2xl shadow-emerald-950/50 text-white overflow-hidden my-auto"
+        className="relative w-full max-w-lg bg-slate-900 border-2 border-emerald-500/70 rounded-2xl sm:rounded-3xl shadow-2xl shadow-emerald-950/50 text-white overflow-hidden my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top 15-second countdown banner & progress bar */}
-        <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-blue-950 border-b border-emerald-500/30 p-3 flex items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-2">
-            <span className="flex h-2.5 w-2.5 relative">
+        <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-blue-950 border-b border-emerald-500/30 p-2.5 sm:p-3 flex items-center justify-between gap-1.5 sm:gap-2 text-xs">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <span className="flex h-2.5 w-2.5 relative shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
             </span>
-            <div className="flex items-center gap-1.5 font-bold">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-300 uppercase tracking-wider text-[11px]">Instant Quick Order</span>
+            <div className="flex items-center gap-1 font-bold truncate">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span className="text-emerald-300 uppercase tracking-wider text-[10px] sm:text-[11px] truncate">Quick Order</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             {hasStartedFilling ? (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-bold border border-emerald-500/40">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] sm:text-[11px] font-bold border border-emerald-500/40">
                 <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                <span>Timer paused for you</span>
+                <span>Timer paused</span>
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-bold border border-amber-500/40">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] sm:text-[11px] font-bold border border-amber-500/40">
                 <Clock className="w-3 h-3 text-amber-400 animate-spin" />
-                <span>Auto-closing in {secondsLeft}s</span>
+                <span>Auto-closing {secondsLeft}s</span>
               </span>
             )}
 
@@ -287,16 +313,101 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
           </div>
         )}
 
-        {/* Form Body */}
-        <form onSubmit={handleSubmit} onFocus={handleInteraction} className="p-5 sm:p-6 space-y-4">
-          <div className="text-left">
-            <h3 id="quick-order-title" className="font-['Outfit'] text-xl sm:text-2xl font-extrabold text-white">
-              A-01 Deadbolt Smart Lock (₦{price.toLocaleString()})
-            </h3>
-            <p className="text-xs text-slate-300 mt-1">
-              Fill your delivery details below to order with <strong className="text-emerald-400 font-bold">Payment on Delivery</strong>. Free transit dispatch nationwide!
-            </p>
+        {/* Form Body with embedded High-Definition Product Slideshow */}
+        <div className="p-3.5 sm:p-6 space-y-3.5 sm:space-y-4 max-h-[82vh] overflow-y-auto custom-scrollbar">
+          {/* Compact Slideshow Component */}
+          <div className="relative rounded-xl overflow-hidden bg-slate-950 border border-emerald-500/40 shadow-md group">
+            {/* Slide Stage with reduced height */}
+            <div className="relative h-28 sm:h-36 w-full flex items-center justify-center bg-slate-950 p-1.5 overflow-hidden">
+              <img
+                src={resolveImageUrl(modalSlides[slideIndex]?.url)}
+                alt={modalSlides[slideIndex]?.title || 'A-01 Smart Lock'}
+                className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                referrerPolicy="no-referrer"
+                onError={handleImageFallback}
+              />
+
+              {/* Prev / Next Carousel Controls */}
+              <button
+                type="button"
+                onClick={() => setSlideIndex((prev) => (prev - 1 + modalSlides.length) % modalSlides.length)}
+                className="absolute left-1.5 top-1/2 -translate-y-1/2 p-1 rounded-full bg-slate-900/80 hover:bg-emerald-600 text-white border border-slate-700 transition-all cursor-pointer shadow-md opacity-80 hover:opacity-100"
+                aria-label="Previous Slide"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSlideIndex((prev) => (prev + 1) % modalSlides.length)}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1 rounded-full bg-slate-900/80 hover:bg-emerald-600 text-white border border-slate-700 transition-all cursor-pointer shadow-md opacity-80 hover:opacity-100"
+                aria-label="Next Slide"
+              >
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+
+              {/* Top status bar on slide: counter & play/pause */}
+              <div className="absolute top-1.5 inset-x-2 flex items-center justify-between text-[9px] font-mono pointer-events-none">
+                <span className="px-1.5 py-0.5 rounded bg-slate-900/90 text-emerald-300 font-bold border border-emerald-500/30 shadow-md">
+                  Photo {slideIndex + 1}/{modalSlides.length}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => setIsSlideshowPlaying(!isSlideshowPlaying)}
+                  className="pointer-events-auto px-1.5 py-0.5 rounded bg-slate-900/90 text-slate-300 hover:text-white font-sans font-bold flex items-center gap-1 border border-slate-700 transition-colors cursor-pointer text-[9px]"
+                  title={isSlideshowPlaying ? 'Pause Slideshow' : 'Resume Slideshow'}
+                >
+                  {isSlideshowPlaying ? (
+                    <>
+                      <Pause className="w-2.5 h-2.5 text-emerald-400" />
+                      <span>ON</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-2.5 h-2.5 text-amber-400" />
+                      <span>Paused</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Bottom slide caption overlay */}
+              <div className="absolute bottom-0 inset-x-0 px-2 py-1 bg-gradient-to-t from-slate-950 via-slate-950/85 to-transparent text-left pointer-events-none">
+                <span className="text-white text-[11px] font-bold block truncate">
+                  {modalSlides[slideIndex]?.title}
+                </span>
+              </div>
+            </div>
+
+            {/* Slide Dot Indicators */}
+            <div className="flex items-center justify-center gap-1 py-1 bg-slate-950/90 border-t border-slate-800">
+              {modalSlides.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setSlideIndex(idx)}
+                  className={`h-1 rounded-full transition-all cursor-pointer ${
+                    idx === slideIndex
+                      ? 'w-4 bg-emerald-400'
+                      : 'w-1 bg-slate-700 hover:bg-slate-500'
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
           </div>
+
+          <form onSubmit={handleSubmit} onFocus={handleInteraction} className="space-y-4">
+            <div className="text-left">
+              <h3 id="quick-order-title" className="font-['Outfit'] text-lg sm:text-xl font-extrabold text-white flex items-center justify-between">
+                <span>A-01 Deadbolt Smart Lock</span>
+                <span className="text-emerald-400 tabular-nums">₦{price.toLocaleString()}</span>
+              </h3>
+              <p className="text-xs text-slate-300 mt-0.5">
+                Includes Contactless Palm Vein, 3D Face Camera, 4.0" Screen, Fingerprint & Pay on Delivery nationwide.
+              </p>
+            </div>
 
           {errorMessage && (
             <div className="p-3 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs flex items-center gap-2">
@@ -553,6 +664,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
             <span>Pay on Delivery · 1-Year Warranty · Instant Confirmation</span>
           </div>
         </form>
+        </div>
       </div>
     </div>
   );

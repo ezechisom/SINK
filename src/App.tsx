@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PublicConfig, Order } from './types';
 import { fetchPublicConfig } from './services/api';
 import { initPixels, trackEvent } from './services/tracking';
@@ -18,6 +18,8 @@ import { MobileStickyBar } from './components/MobileStickyBar';
 import { AdminDashboard } from './components/AdminDashboard';
 import { CookieBanner } from './components/CookieBanner';
 import { QuickOrderModal } from './components/QuickOrderModal';
+import { CountdownTimer } from './components/CountdownTimer';
+import { resolveImageUrl } from './utils/imageHelper';
 
 // Fallback initial config matching the required ₦180,000 price & reference specs
 const initialFallbackConfig: PublicConfig = {
@@ -25,13 +27,13 @@ const initialFallbackConfig: PublicConfig = {
     storeName: 'Moonlight Crescent — Smart Security & Locks',
     productName: 'A-01 Deadbolt Type Smart Lock',
     headline: 'SMART ACCESS. SECURE EVERY DAY.',
-    subheading: 'Sleek design. Advanced protection. Built for reliability, designed for you. Advanced security meets modern convenience with 3D Face Recognition, 4.0-Inch Interior Screen, and Tuya Smart Remote Control.',
+    subheading: 'Sleek design. Advanced protection. Built for reliability, designed for you. Advanced security meets modern convenience with Contactless Palm Vein Scanning, 3D Face Recognition, 4.0-Inch Interior Screen, and Tuya Smart Remote Control.',
     sellingPrice: 180000,
-    whatsappNumber: '+2348147778029',
-    supportPhone: '08147778029',
-    supportEmail: 'orders@smartlock.ng',
+    whatsappNumber: '+2349136827730',
+    supportPhone: '09136827730',
+    supportEmail: 'info@moonlightluxuryhometech.shop',
     formspreeEndpoint: 'https://formspree.io/f/xbggbvjg',
-    pickupOfficeAddress: 'Plot 14 Admiralty Way, Lekki Phase 1, Lagos, Nigeria',
+    pickupOfficeAddress: 'Block 17 Shop 5 Agric Odunade Market, Lagos, Nigeria',
     videoEmbedUrl: '',
     videoTitle: 'A-01 Deadbolt Smart Lock Operational & Feature Showcase',
     videoDescription: 'Watch 3D Face Recognition Cat-Eye Camera, Semiconductor Biometric Fingerprint, 4.0-Inch Interior IPS Screen, Virtual Passcode, and Tuya App remote unlock in action.',
@@ -73,7 +75,7 @@ const initialFallbackConfig: PublicConfig = {
         },
         {
           question: '7. How do I contact customer support or confirm via WhatsApp?',
-          answer: 'Once you submit your order form, you can immediately confirm with your unique order reference directly on WhatsApp with one click, or call our customer line directly at 08147778029.'
+          answer: 'Once you submit your order form, you can immediately confirm with your unique order reference directly on WhatsApp with one click, or call our customer line directly at 09136827730.'
         }
       ]
     }
@@ -93,7 +95,8 @@ const initialFallbackConfig: PublicConfig = {
   },
   specifications: [
     { label: 'Model & Type', value: 'A-01 Deadbolt Type Smart Lock (Front & Rear Panels)' },
-    { label: 'Access Methods (6-in-1)', value: '3D Face Recognition, Semiconductor Fingerprint, Anti-Peep Touch PIN, Smart RFID Card, Tuya App, Mechanical Key' },
+    { label: 'Access Methods (Multiple Unlocking)', value: 'Contactless Palm Vein, 3D Face Recognition, Semiconductor Fingerprint, Anti-Peep Touch PIN, Smart RFID/NFC Card, Tuya App, Mechanical Key, Combination Unlock' },
+    { label: 'Palm Vein Technology', value: 'Near-Infrared Touchless Subcutaneous Vascular Vein Scanner (<0.5s response, 0.0001% FAR, 100% anti-spoofing)' },
     { label: 'Face Recognition Technology', value: '3D Infrared Cat-Eye Camera with Biometric Depth Sensor (Works in dark night, anti-photo spoofing, <0.5s)' },
     { label: 'Interior Screen', value: '4.0-Inch High-Definition IPS Color Screen (Instant video display of visitors outside)' },
     { label: 'Fingerprint Recognition', value: '0.3-Second Semiconductor Biometric Sensor with 360° Angle Reading (Stores up to 100 fingerprints)' },
@@ -120,55 +123,55 @@ const initialFallbackConfig: PublicConfig = {
   galleryImages: [
     {
       id: 'img-master-poster',
-      url: '/public/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png',
+      url: '/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png',
       title: 'A-01 Smart Access Master Showcase',
       subtitle: 'Official presentation featuring the ₦180,000 promo price, 3D Face Recognition, and 4.0-inch Interior Screen'
     },
     {
       id: 'img-video-intercom',
-      url: '/public/assets/aistudio/image_d0f1a489.png',
+      url: '/assets/aistudio/image_d0f1a489.png',
       title: 'Video Intercom & 3D Face Recognition',
       subtitle: 'Active monitoring video intercom, 3D face recognition cat-eye camera, and Tuya Smart Mobile App integration'
     },
     {
       id: 'img-fingerprint-05s',
-      url: '/public/assets/aistudio/image_3e43ad8c.png',
+      url: '/assets/aistudio/image_3e43ad8c.png',
       title: 'Semiconductor Fingerprint 0.5s Unlock',
       subtitle: 'Ultra-fast 0.5-second biometric sensor, 99.99% recognition accuracy, and 0.01% false rejection rate'
     },
     {
       id: 'img-privacy-password',
-      url: '/public/assets/aistudio/image_59eea695.png',
+      url: '/assets/aistudio/image_59eea695.png',
       title: 'Anti-Peep Virtual Privacy Password',
       subtitle: 'Enter random fake PIN digits before or after your real password to protect against shoulder-surfing'
     },
     {
       id: 'img-multi-access-methods',
-      url: '/public/assets/aistudio/image_aa3a96c0.png',
-      title: '6-in-1 Multi-Access Smart Unlocking',
-      subtitle: 'Unlock via 3D Face, Biometric Fingerprint, Encrypted IC Card, Virtual Password, Mechanical Key, or Phone App'
+      url: '/assets/aistudio/image_42d449af.png',
+      title: 'Multiple Unlocking Methods & Smart Access',
+      subtitle: 'Multiple ways to unlock: Face Recognition, Palm Vein, Semiconductor Fingerprint, Password, NFC Card, Manual Key, Combination & Tuya App'
     },
     {
       id: 'img-parameters-anatomy',
-      url: '/public/assets/aistudio/image_d9b7f963.png',
+      url: '/assets/aistudio/image_d9b7f963.png',
       title: 'Technical Parameters & Anatomy Architecture',
       subtitle: 'Comprehensive breakdown of front and interior panel components, emergency ports, sensors, and safety handles'
     },
     {
       id: 'img-endurance-battery',
-      url: '/public/assets/aistudio/image_2cf67039.png',
+      url: '/assets/aistudio/image_2cf67039.png',
       title: 'Long Endurance Rechargeable Battery & Screen',
       subtitle: 'High-capacity lithium battery lasting 3–5 months per charge with built-in interior color monitor'
     },
     {
       id: 'img-product-package-list',
-      url: '/public/assets/aistudio/image_1fd68c2a.png',
+      url: '/assets/aistudio/image_1fd68c2a.png',
       title: 'Complete Box Hardware Package & Inclusions',
       subtitle: 'Front & rear panels, heavy-duty multi-bolt lock body, 2 keys, 2 magnetic IC cards, USB cable, screws & templates'
     },
     {
       id: 'img-mortise-dimensions',
-      url: '/public/assets/aistudio/image_61bdf854.png',
+      url: '/assets/aistudio/image_61bdf854.png',
       title: 'Heavy-Duty Security Mortise Dimensions (24*240)',
       subtitle: 'Industrial-grade multi-bolt stainless steel lock body with 240mm faceplate for standard Nigerian security doors'
     }
@@ -228,23 +231,31 @@ export default function App() {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
   const [hasOrdered, setHasOrdered] = useState(false);
+  const [isFillingMainForm, setIsFillingMainForm] = useState(false);
+  const isFillingMainFormRef = useRef(false);
 
-  // User request: Quick Order Form that pops up every 45 seconds a customer stays on the site
+  // Keep ref up to date synchronously without restarting timers
   useEffect(() => {
-    if (hasOrdered) return;
+    isFillingMainFormRef.current = isFillingMainForm;
+  }, [isFillingMainForm]);
 
-    const interval = setInterval(() => {
-      setIsQuickOrderOpen((prev) => {
-        // If not already open, customer has not ordered, and admin is not open, show popup
-        if (!prev && !hasOrdered && !isAdminOpen) {
-          return true;
-        }
-        return prev;
-      });
-    }, 45000);
+    // User request: Quick Order Form that pops up every 60 seconds a customer stays on the site
+    // User instruction: "DONT ALLOW THE QUICK POP UP FORM TO POP UP WHEN SOMEONE IS ALREADY FILLING THE FORM"
+    useEffect(() => {
+      if (hasOrdered) return;
 
-    return () => clearInterval(interval);
-  }, [hasOrdered, isAdminOpen]);
+      const interval = setInterval(() => {
+        setIsQuickOrderOpen((prev) => {
+          // NEVER show popup if customer has already ordered, admin is open, OR customer is currently filling the main form
+          if (!prev && !hasOrdered && !isAdminOpen && !isFillingMainFormRef.current) {
+            return true;
+          }
+          return prev;
+        });
+      }, 60000);
+
+      return () => clearInterval(interval);
+    }, [hasOrdered, isAdminOpen]);
 
   const loadConfig = async () => {
     try {
@@ -283,12 +294,20 @@ export default function App() {
   };
 
   const sellingPrice = config.settings.sellingPrice || 180000;
-  const heroImage =
+  const heroImage = resolveImageUrl(
     config.galleryImages[0]?.url ||
-    '/public/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png';
+    '/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png'
+  );
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] font-['Plus_Jakarta_Sans',sans-serif] flex flex-col selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#f8fafc] text-[#0f172a] font-['Plus_Jakarta_Sans',sans-serif] flex flex-col selection:bg-blue-600 selection:text-white">
+      {/* 14-Day Countdown Urgency Top Banner */}
+      <CountdownTimer
+        variant="banner"
+        price={sellingPrice}
+        onOrderClick={scrollToOrderForm}
+      />
+
       {/* 1. Header (Top Bar Contract: 3 zones, single-line links, 1 primary action) */}
       <Header
         price={sellingPrice}
@@ -338,6 +357,12 @@ export default function App() {
           price={sellingPrice}
           deliveryFees={config.deliveryFees}
           nigerianStates={nigerianStates}
+          onFormInteraction={(isInteracting) => {
+            setIsFillingMainForm(isInteracting);
+            if (isInteracting) {
+              setIsQuickOrderOpen(false);
+            }
+          }}
           onOrderSuccess={(order) => {
             setHasOrdered(true);
             setConfirmedOrder(order);
@@ -372,7 +397,7 @@ export default function App() {
         />
       )}
 
-      {/* 14. Quick Order Modal (pops up every 45s, auto-closes in 15s if not filled) */}
+      {/* 14. Quick Order Modal (pops up every 60s, auto-closes in 15s if not filled, with photo slideshow) */}
       <QuickOrderModal
         isOpen={isQuickOrderOpen}
         onClose={() => setIsQuickOrderOpen(false)}
@@ -380,6 +405,7 @@ export default function App() {
         nigerianStates={nigerianStates}
         deliveryFees={config.deliveryFees}
         formspreeEndpoint={config.settings.formspreeEndpoint}
+        images={config.galleryImages}
         onOrderSuccess={(order) => {
           setHasOrdered(true);
           setConfirmedOrder(order);

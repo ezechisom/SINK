@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ZoomIn, X, ChevronLeft, ChevronRight, Sparkles, LayoutGrid, Eye, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { ZoomIn, X, ChevronLeft, ChevronRight, Sparkles, LayoutGrid, Eye, CheckCircle2, ShieldCheck, Play, Pause } from 'lucide-react';
 import { PublicConfig } from '../types';
+import { resolveImageUrl, handleImageFallback } from '../utils/imageHelper';
 
 interface ProductGalleryProps {
   images: PublicConfig['galleryImages'];
@@ -12,13 +13,23 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<GalleryCategory>('all');
-  const [viewMode, setViewMode] = useState<'grid' | 'spotlight'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'spotlight'>('spotlight');
+  const [isSlideshowPlaying, setIsSlideshowPlaying] = useState(true);
+
+  // Auto-advance slideshow every 3.5 seconds
+  useEffect(() => {
+    if (!isSlideshowPlaying || isLightboxOpen || images.length <= 1) return;
+    const interval = setInterval(() => {
+      setSelectedIndex((prev) => (prev + 1) % images.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [isSlideshowPlaying, isLightboxOpen, images.length]);
 
   // Assign category tags to images
   const getCategoryForImage = (id: string, title: string): GalleryCategory => {
     const lower = (id + ' ' + title).toLowerCase();
     if (lower.includes('poster') || lower.includes('price') || lower.includes('master')) return 'overview';
-    if (lower.includes('fingerprint') || lower.includes('password') || lower.includes('pin') || lower.includes('biometric')) return 'biometric';
+    if (lower.includes('palm') || lower.includes('vein') || lower.includes('fingerprint') || lower.includes('password') || lower.includes('pin') || lower.includes('biometric')) return 'biometric';
     if (lower.includes('intercom') || lower.includes('app') || lower.includes('multi-access') || lower.includes('face')) return 'smart';
     return 'hardware';
   };
@@ -74,7 +85,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
             A-01 SMART LOCK PHOTO GALLERY &amp; LOOKBOOK
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-300 leading-relaxed">
-            Examine high-definition photos of the ₦180,000 master presentation, 3D face camera with video intercom, 0.5s semiconductor fingerprint sensor, anti-peep keypad, 3200mAh battery, hardware anatomy, package inclusions, and 24*240 mm mortise dimensions.
+            Examine high-definition photos of the ₦180,000 master presentation, Contactless Palm Vein Scanning, 3D face camera with video intercom, 0.5s semiconductor fingerprint sensor, anti-peep keypad, 4200mAh battery, hardware anatomy, package inclusions, and 24*240 mm mortise dimensions.
           </p>
         </div>
 
@@ -94,7 +105,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveFilter(tab.id)}
-                  className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                  className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-blue-400'
                       : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-700/60'
@@ -106,30 +117,55 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
             })}
           </div>
 
-          {/* View Mode Toggle: Grid vs Spotlight */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-950 border border-slate-800">
+          {/* View Mode Toggle & Slideshow Player */}
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            {/* Slideshow Auto-Play Toggle */}
             <button
-              onClick={() => setViewMode('grid')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                viewMode === 'grid'
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+              onClick={() => setIsSlideshowPlaying(!isSlideshowPlaying)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                isSlideshowPlaying
+                  ? 'bg-emerald-600/90 text-white border-emerald-400 shadow-md shadow-emerald-500/20'
+                  : 'bg-slate-800 text-slate-300 hover:text-white border-slate-700'
               }`}
+              title={isSlideshowPlaying ? 'Pause Auto Slideshow' : 'Play Auto Slideshow'}
             >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              <span>Full Grid</span>
+              {isSlideshowPlaying ? (
+                <>
+                  <Pause className="w-3.5 h-3.5 text-white" />
+                  <span>Slideshow ON</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Play Slideshow</span>
+                </>
+              )}
             </button>
-            <button
-              onClick={() => setViewMode('spotlight')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                viewMode === 'spotlight'
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Eye className="w-3.5 h-3.5" />
-              <span>Spotlight</span>
-            </button>
+
+            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-950 border border-slate-800">
+              <button
+                onClick={() => setViewMode('spotlight')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  viewMode === 'spotlight'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Eye className="w-3.5 h-3.5" />
+                <span>Slideshow / Spotlight</span>
+              </button>
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  viewMode === 'grid'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <LayoutGrid className="w-3.5 h-3.5" />
+                <span>All Grid</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -152,11 +188,12 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
                   {/* Photo Display Container - Pure untouched uncropped object-contain */}
                   <div className="relative aspect-square sm:aspect-[4/3] bg-slate-950 overflow-hidden flex items-center justify-center p-3 sm:p-5">
                     <img
-                      src={img.url}
+                      src={resolveImageUrl(img.url)}
                       alt={img.title}
                       className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
                       referrerPolicy="no-referrer"
                       loading="lazy"
+                      onError={handleImageFallback}
                     />
 
                     {/* Badge top-left */}
@@ -218,10 +255,11 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
             <div className="lg:col-span-8 flex flex-col">
               <div className="relative rounded-3xl overflow-hidden bg-slate-950 border-2 border-blue-500/50 shadow-2xl shadow-blue-950/40 aspect-[4/3] sm:aspect-[16/10] flex items-center justify-center p-4 sm:p-6 group">
                 <img
-                  src={activeImage.url}
+                  src={resolveImageUrl(activeImage.url)}
                   alt={activeImage.title}
                   className="w-full h-full object-contain transition-transform duration-500"
                   referrerPolicy="no-referrer"
+                  onError={handleImageFallback}
                 />
 
                 {/* Enlarge trigger */}
@@ -284,10 +322,11 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
                       }`}
                     >
                       <img
-                        src={img.url}
+                        src={resolveImageUrl(img.url)}
                         alt={img.title}
                         className="w-16 h-14 rounded-xl object-contain bg-slate-900 p-1 shrink-0 border border-slate-800"
                         referrerPolicy="no-referrer"
+                        onError={handleImageFallback}
                       />
                       <div className="flex flex-col min-w-0 pr-1">
                         <span className={`text-xs sm:text-sm font-bold truncate ${isCurrent ? 'text-emerald-300' : 'text-white'}`}>
@@ -379,10 +418,11 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
           {/* Lightbox Main Stage */}
           <div className="relative w-full max-w-5xl flex-1 flex items-center justify-center my-2 overflow-hidden">
             <img
-              src={activeImage.url}
+              src={resolveImageUrl(activeImage.url)}
               alt={activeImage.title}
               className="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl border-2 border-blue-500/30"
               referrerPolicy="no-referrer"
+              onError={handleImageFallback}
             />
 
             {/* Prev / Next Buttons */}

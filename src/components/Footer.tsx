@@ -38,17 +38,19 @@ export const Footer: React.FC<FooterProps> = ({ settings, onAdminClick }) => {
             <div className="space-y-3 text-xs">
               <div className="flex items-center gap-2 text-slate-300">
                 <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <a href={`tel:${settings.supportPhone || '08147778029'}`} className="hover:text-emerald-300 font-semibold">
-                  {settings.supportPhone || '08147778029'}
+                <a href={`tel:${settings.supportPhone || '09136827730'}`} className="hover:text-emerald-300 font-semibold">
+                  {settings.supportPhone || '09136827730'}
                 </a>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                <span>{settings.supportEmail || 'orders@smartlock.ng'}</span>
+                <a href={`mailto:${settings.supportEmail || 'info@moonlightluxuryhometech.shop'}`} className="hover:text-blue-300 font-semibold break-all">
+                  {settings.supportEmail || 'info@moonlightluxuryhometech.shop'}
+                </a>
               </div>
               <div className="flex items-start gap-2 text-slate-300">
                 <MapPin className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
-                <span>{settings.pickupOfficeAddress || 'Plot 14 Admiralty Way, Lekki Phase 1, Lagos'}</span>
+                <span>{settings.pickupOfficeAddress || 'Block 17 Shop 5 Agric Odunade Market, Lagos, Nigeria'}</span>
               </div>
             </div>
           </div>

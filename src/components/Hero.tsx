@@ -1,5 +1,7 @@
 import React from 'react';
 import { ShoppingBag, CheckCircle2, Shield, Eye, Smartphone, BatteryCharging, Sparkles, KeyRound, Phone, Lock } from 'lucide-react';
+import { CountdownTimer } from './CountdownTimer';
+import { resolveImageUrl, handleImageFallback } from '../utils/imageHelper';
 
 interface HeroProps {
   price: number;
@@ -40,19 +42,19 @@ export const Hero: React.FC<HeroProps> = ({ price, onOrderClick, heroImage }) =>
             </div>
 
             {/* Main Headline from poster */}
-            <h1 className="font-['Outfit'] text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold text-white tracking-tight leading-[1.12] text-balance">
+            <h1 className="font-['Outfit'] text-2xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold text-white tracking-tight leading-[1.12] text-balance">
               SMART ACCESS.<br />
               <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">
                 SECURE EVERY DAY.
               </span>
             </h1>
 
-            <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl font-normal">
-              Advanced security meets modern convenience. Control access your way, anytime, anywhere with <strong className="text-white font-bold">3D Face Recognition</strong>, a vibrant <strong className="text-white font-bold">4.0-inch Interior Screen</strong>, 0.3s Semiconductor Fingerprint, and Tuya Smartphone App remote access.
+            <p className="mt-3.5 sm:mt-4 text-sm sm:text-lg text-slate-300 leading-relaxed max-w-xl font-normal">
+              Advanced security meets modern convenience. Control access your way, anytime, anywhere with <strong className="text-white font-bold">Contactless Palm Vein Scanning</strong>, <strong className="text-white font-bold">3D Face Recognition</strong>, a vibrant <strong className="text-white font-bold">4.0-inch Interior Screen</strong>, 0.3s Semiconductor Fingerprint, and Tuya Smartphone App remote access.
             </p>
 
             {/* Price Presentation Card with 180k Unit Price & Highlight */}
-            <div className="mt-6 p-5 rounded-2xl bg-slate-900/90 border-2 border-blue-500/40 shadow-2xl shadow-blue-500/10 flex items-center justify-between gap-4 max-w-lg backdrop-blur-md">
+            <div className="mt-5 sm:mt-6 p-4 sm:p-5 rounded-2xl bg-slate-900/90 border-2 border-blue-500/40 shadow-2xl shadow-blue-500/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 max-w-lg backdrop-blur-md">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs uppercase tracking-wider text-slate-400 font-bold block">
@@ -63,7 +65,7 @@ export const Hero: React.FC<HeroProps> = ({ price, onOrderClick, heroImage }) =>
                   </span>
                 </div>
                 <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="font-['Outfit'] text-3xl sm:text-4xl font-extrabold text-emerald-400 tabular-nums">
+                  <span className="font-['Outfit'] text-2xl sm:text-4xl font-extrabold text-emerald-400 tabular-nums">
                     ₦{price.toLocaleString()}
                   </span>
                   <span className="text-xs font-extrabold text-blue-300 bg-blue-900/60 px-2 py-0.5 rounded border border-blue-500/40">
@@ -72,7 +74,7 @@ export const Hero: React.FC<HeroProps> = ({ price, onOrderClick, heroImage }) =>
                 </div>
               </div>
 
-              <div className="text-right text-xs text-slate-300 flex flex-col gap-1 shrink-0">
+              <div className="text-left sm:text-right text-xs text-slate-300 flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-1 shrink-0 pt-2 sm:pt-0 border-t border-slate-800 sm:border-t-0">
                 <span className="inline-flex items-center justify-end gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold border border-emerald-500/40">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                   In Stock Nigeria
@@ -83,29 +85,39 @@ export const Hero: React.FC<HeroProps> = ({ price, onOrderClick, heroImage }) =>
               </div>
             </div>
 
+            {/* 14-Day Countdown Urgency Timer Component */}
+            <div className="mt-5 sm:mt-6 max-w-lg w-full">
+              <CountdownTimer
+                variant="card"
+                price={price}
+                onOrderClick={onOrderClick}
+              />
+            </div>
+
             {/* Primary Action Button: GLOWING AND BLINKING */}
-            <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 max-w-lg">
+            <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 max-w-lg w-full">
               <button
                 onClick={onOrderClick}
-                className="action-glow flex-1 flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-500 hover:from-blue-700 hover:to-emerald-600 text-white font-extrabold text-base tracking-wide shadow-xl active:scale-[0.98] transition-all cursor-pointer border border-blue-400/40"
+                className="action-glow flex-1 flex items-center justify-center gap-2 sm:gap-3 px-4 py-3.5 sm:px-6 sm:py-4 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-500 hover:from-blue-700 hover:to-emerald-600 text-white font-extrabold text-sm sm:text-base tracking-wide shadow-xl active:scale-[0.98] transition-all cursor-pointer border border-blue-400/40"
               >
-                <ShoppingBag className="w-5 h-5 text-white" />
-                <span>ORDER NOW — NATIONWIDE DELIVERY</span>
+                <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-white shrink-0" />
+                <span className="hidden xs:inline">ORDER NOW — NATIONWIDE DELIVERY</span>
+                <span className="xs:hidden">ORDER NOW · ₦{price.toLocaleString()}</span>
               </button>
             </div>
 
             {/* Phone & Trust Highlights with Green Accents */}
-            <div className="mt-5 flex flex-wrap items-center gap-y-2 gap-x-5 text-xs text-slate-300 font-semibold">
+            <div className="mt-5 flex flex-wrap items-center gap-y-2 gap-x-4 sm:gap-x-5 text-xs text-slate-300 font-semibold">
               <a
-                href="tel:08147778029"
+                href="tel:09136827730"
                 className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 transition-colors font-bold"
               >
                 <Phone className="w-4 h-4 text-emerald-400" />
-                <span>Hotline: 08147778029</span>
+                <span>Hotline: 09136827730</span>
               </a>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="text-emerald-300 font-bold">Pay on Delivery Nationwide</span>
+                <span className="text-emerald-300 font-bold">Pay on Delivery</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -115,29 +127,30 @@ export const Hero: React.FC<HeroProps> = ({ price, onOrderClick, heroImage }) =>
           </div>
 
           {/* Right Column: Master Product Showcase Image */}
-          <div className="lg:col-span-6">
+          <div className="lg:col-span-6 w-full">
             <div className="relative group rounded-3xl overflow-hidden border-2 border-blue-500/40 bg-slate-900/80 shadow-2xl shadow-blue-900/30">
               <img
-                src={heroImage}
+                src={resolveImageUrl(heroImage)}
                 alt="A-01 Deadbolt Type Smart Lock with 3D Face Recognition & 4.0-inch Interior Screen"
                 className="w-full h-auto aspect-square sm:aspect-[4/3] object-contain bg-slate-950 p-2 sm:p-4 transition-transform duration-700 group-hover:scale-[1.02]"
                 referrerPolicy="no-referrer"
                 loading="eager"
+                onError={handleImageFallback}
               />
 
               {/* Floating feature callout overlay with Cyber Blue & Emerald Accent */}
-              <div className="absolute bottom-4 left-4 right-4 sm:left-6 sm:right-6 p-4 rounded-2xl bg-slate-900/95 backdrop-blur-md border border-blue-400/40 text-left shadow-2xl">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
-                      <Lock className="w-5 h-5" />
+              <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-6 sm:right-6 p-3 sm:p-4 rounded-2xl bg-slate-900/95 backdrop-blur-md border border-blue-400/40 text-left shadow-2xl">
+                <div className="flex items-center justify-between gap-2 sm:gap-3">
+                  <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 to-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                      <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <div>
-                      <span className="text-sm font-extrabold text-white block">
-                        Dual Panel: 3D Face Camera + 4.0" Screen
+                    <div className="min-w-0">
+                      <span className="text-xs sm:text-sm font-extrabold text-white block truncate">
+                        Dual Panel: 3D Face + 4.0" Screen
                       </span>
-                      <span className="text-xs text-emerald-400 font-bold">
-                        Tuya App · Fingerprint · Passcode · IC Card · Physical Keys
+                      <span className="text-[10px] sm:text-xs text-emerald-400 font-bold block truncate">
+                        Palm Vein · 3D Face · 4.0" Screen · Tuya App · Fingerprint
                       </span>
                     </div>
                   </div>
@@ -153,7 +166,7 @@ export const Hero: React.FC<HeroProps> = ({ price, onOrderClick, heroImage }) =>
         </div>
 
         {/* 4-Item Feature Strip Below Hero Split matching Creative Details */}
-        <div className="mt-12 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 border-t border-blue-900/50">
+        <div className="mt-10 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-6 sm:pt-8 border-t border-blue-900/50">
           <div className="flex items-start gap-3 p-4 rounded-2xl bg-slate-900/80 border border-blue-800/40 shadow-sm text-left">
             <div className="w-10 h-10 rounded-xl bg-blue-950 text-blue-400 flex items-center justify-center shrink-0 border border-blue-700/50">
               <Eye className="w-5 h-5" />

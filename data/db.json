@@ -4,16 +4,16 @@
     "storeName": "Moonlight Crescent — Smart Security & Locks",
     "productName": "A-01 Deadbolt Type Smart Lock",
     "headline": "SMART ACCESS. SECURE EVERY DAY.",
-    "subheading": "Sleek design. Advanced protection. Built for reliability, designed for you. Advanced security meets modern convenience with 3D Face Recognition, 4.0-Inch Interior Screen, and Tuya Smart Remote Control.",
+    "subheading": "Sleek design. Advanced protection. Built for reliability, designed for you. Advanced security meets modern convenience with Contactless Palm Vein Scanning, 3D Face Recognition, 4.0-Inch Interior Screen, and Tuya Smart Remote Control.",
     "sellingPrice": 180000,
-    "whatsappNumber": "+2348147778029",
-    "supportPhone": "08147778029",
-    "supportEmail": "orders@smartlock.ng",
+    "whatsappNumber": "+2349136827730",
+    "supportPhone": "09136827730",
+    "supportEmail": "info@moonlightluxuryhometech.shop",
     "formspreeEndpoint": "https://formspree.io/f/xbggbvjg",
-    "pickupOfficeAddress": "Plot 14 Admiralty Way, Lekki Phase 1, Lagos, Nigeria",
+    "pickupOfficeAddress": "Block 17 Shop 5 Agric Odunade Market, Lagos, Nigeria",
     "videoEmbedUrl": "",
     "videoTitle": "A-01 Deadbolt Smart Lock Operational & Feature Showcase",
-    "videoDescription": "Watch 3D Face Recognition Cat-Eye Camera, Semiconductor Biometric Fingerprint, 4.0-Inch Interior IPS Screen, Virtual Passcode, and Tuya App remote unlock in action.",
+    "videoDescription": "Watch Contactless Palm Vein, 3D Face Recognition Cat-Eye Camera, Semiconductor Biometric Fingerprint, 4.0-Inch Interior IPS Screen, Virtual Passcode, and Tuya App remote unlock in action.",
     "pixels": {
       "metaPixelId": "947636671276929",
       "metaAccessToken": "",
@@ -28,7 +28,7 @@
       "faqText": [
         {
           "question": "1. What is the A-01 Deadbolt Type Smart Lock?",
-          "answer": "The A-01 is a premium deadbolt type smart door lock featuring 6-in-1 multi-access: 3D Face Recognition via an infrared cat-eye camera, 4.0-inch interior HD IPS color display screen, 0.3s semiconductor biometric fingerprint, anti-peep capacitive touch passcode, RFID IC smart card swipe, mobile app remote control via Tuya/Smart Life, and physical emergency mechanical keys."
+          "answer": "The A-01 is a premium deadbolt type smart door lock featuring multiple unlocking methods: Contactless Palm Vein Biometrics, 3D Face Recognition via an infrared cat-eye camera, 4.0-inch interior HD IPS color display screen, 0.3s semiconductor biometric fingerprint, anti-peep capacitive touch passcode, RFID/NFC IC smart card swipe, mobile app remote control via Tuya/Smart Life, and physical emergency mechanical keys."
         },
         {
           "question": "2. How does the 3D Face Recognition & 4.0-inch Interior Screen work?",
@@ -52,7 +52,7 @@
         },
         {
           "question": "7. How do I contact customer support or confirm via WhatsApp?",
-          "answer": "Once you submit your order form, you can immediately confirm with your unique order reference directly on WhatsApp with one click, or call our customer line directly at 08147778029."
+          "answer": "Once you submit your order form, you can immediately confirm with your unique order reference directly on WhatsApp with one click, or call our customer line directly at 09136827730."
         }
       ]
     }
@@ -102,8 +102,12 @@
       "value": "A-01 Deadbolt Type Smart Lock (Front & Rear Panels)"
     },
     {
-      "label": "Access Methods (6-in-1)",
-      "value": "3D Face Recognition, Semiconductor Fingerprint, Anti-Peep Touch PIN, Smart RFID Card, Tuya App, Mechanical Key"
+      "label": "Access Methods (Multiple Unlocking)",
+      "value": "Palm Vein Recognition, 3D Face Recognition, Semiconductor Fingerprint, Anti-Peep Touch PIN, Smart RFID/NFC Card, Tuya App, Mechanical Key, Combination Unlock"
+    },
+    {
+      "label": "Palm Vein Technology",
+      "value": "Near-Infrared Touchless Subcutaneous Vascular Vein Scanner (<0.5s response, 0.0001% FAR, 100% anti-spoofing)"
     },
     {
       "label": "Face Recognition Technology",
@@ -164,55 +168,55 @@
   "galleryImages": [
     {
       "id": "img-master-poster",
-      "url": "/public/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png",
+      "url": "/assets/aistudio/Neon_Smart_Lock_Security_Poster_0741352e.png",
       "title": "A-01 Smart Access Master Showcase",
       "subtitle": "Official presentation featuring the ₦180,000 promo price, 3D Face Recognition, and 4.0-inch Interior Screen"
     },
     {
       "id": "img-video-intercom",
-      "url": "/public/assets/aistudio/image_d0f1a489.png",
+      "url": "/assets/aistudio/image_d0f1a489.png",
       "title": "Video Intercom & 3D Face Recognition",
       "subtitle": "Active monitoring video intercom, 3D face recognition cat-eye camera, and Tuya Smart Mobile App integration"
     },
     {
       "id": "img-fingerprint-05s",
-      "url": "/public/assets/aistudio/image_3e43ad8c.png",
+      "url": "/assets/aistudio/image_3e43ad8c.png",
       "title": "Semiconductor Fingerprint 0.5s Unlock",
       "subtitle": "Ultra-fast 0.5-second biometric sensor, 99.99% recognition accuracy, and 0.01% false rejection rate"
     },
     {
       "id": "img-privacy-password",
-      "url": "/public/assets/aistudio/image_59eea695.png",
+      "url": "/assets/aistudio/image_59eea695.png",
       "title": "Anti-Peep Virtual Privacy Password",
       "subtitle": "Enter random fake PIN digits before or after your real password to protect against shoulder-surfing"
     },
     {
       "id": "img-multi-access-methods",
-      "url": "/public/assets/aistudio/image_aa3a96c0.png",
-      "title": "6-in-1 Multi-Access Smart Unlocking",
-      "subtitle": "Unlock via 3D Face, Biometric Fingerprint, Encrypted IC Card, Virtual Password, Mechanical Key, or Phone App"
+      "url": "/assets/aistudio/image_42d449af.png",
+      "title": "Multiple Unlocking Methods & Smart Access",
+      "subtitle": "Multiple ways to unlock: Face Recognition, Palm Vein, Semiconductor Fingerprint, Password, NFC Card, Manual Key, Combination & Tuya App"
     },
     {
       "id": "img-parameters-anatomy",
-      "url": "/public/assets/aistudio/image_d9b7f963.png",
+      "url": "/assets/aistudio/image_d9b7f963.png",
       "title": "Technical Parameters & Anatomy Architecture",
       "subtitle": "Comprehensive breakdown of front and interior panel components, emergency ports, sensors, and safety handles"
     },
     {
       "id": "img-endurance-battery",
-      "url": "/public/assets/aistudio/image_2cf67039.png",
+      "url": "/assets/aistudio/image_2cf67039.png",
       "title": "Long Endurance Rechargeable Battery & Screen",
       "subtitle": "High-capacity lithium battery lasting 3–5 months per charge with built-in interior color monitor"
     },
     {
       "id": "img-product-package-list",
-      "url": "/public/assets/aistudio/image_1fd68c2a.png",
+      "url": "/assets/aistudio/image_1fd68c2a.png",
       "title": "Complete Box Hardware Package & Inclusions",
       "subtitle": "Front & rear panels, heavy-duty multi-bolt lock body, 2 keys, 2 magnetic IC cards, USB cable, screws & templates"
     },
     {
       "id": "img-mortise-dimensions",
-      "url": "/public/assets/aistudio/image_61bdf854.png",
+      "url": "/assets/aistudio/image_61bdf854.png",
       "title": "Heavy-Duty Security Mortise Dimensions (24*240)",
       "subtitle": "Industrial-grade multi-bolt stainless steel lock body with 240mm faceplate for standard Nigerian security doors"
     }
@@ -255,5 +259,113 @@
       "verified": true
     }
   ],
-  "orders": []
+  "orders": [
+    {
+      "id": "MC-2618503",
+      "createdAt": "2026-11-07T12:55:16.459Z",
+      "fullName": "Mallam Danladi",
+      "phone": "08099887766",
+      "whatsapp": "08099887766",
+      "state": "Federal Capital Territory (Abuja)",
+      "city": "Federal Capital Territory (Abuja)",
+      "deliveryMethod": "Motor Park Delivery",
+      "motorParkLocation": "Utako",
+      "doorstepFee": 0,
+      "deliveryAddress": "Utako Motor Park Terminal, Federal Capital Territory (Abuja)",
+      "quantity": 1,
+      "unitPrice": 180000,
+      "subtotal": 180000,
+      "discount": 0,
+      "deliveryFee": 0,
+      "total": 180000,
+      "notes": "",
+      "status": "Pending",
+      "paymentMethod": "Payment on Delivery"
+    },
+    {
+      "id": "MC-2696351",
+      "createdAt": "2026-11-07T12:55:16.442Z",
+      "fullName": "Chidinma Nwosu",
+      "phone": "08031234567",
+      "whatsapp": "08031234567",
+      "state": "Lagos",
+      "city": "Lagos",
+      "deliveryMethod": "Doorstep Delivery",
+      "doorstepFee": 0,
+      "deliveryAddress": "Block 4, Flat 2, 1004 Estate, Victoria Island",
+      "quantity": 2,
+      "unitPrice": 180000,
+      "subtotal": 360000,
+      "discount": 5000,
+      "deliveryFee": 0,
+      "total": 355000,
+      "notes": "",
+      "status": "Pending",
+      "paymentMethod": "Payment on Delivery"
+    },
+    {
+      "id": "MC-2662425",
+      "createdAt": "2026-11-07T12:55:12.316Z",
+      "fullName": "Mallam Danladi",
+      "phone": "08099887766",
+      "whatsapp": "08099887766",
+      "state": "Federal Capital Territory (Abuja)",
+      "city": "Federal Capital Territory (Abuja)",
+      "deliveryMethod": "Motor Park Delivery",
+      "motorParkLocation": "Utako",
+      "doorstepFee": 0,
+      "deliveryAddress": "Utako Motor Park Terminal, Federal Capital Territory (Abuja)",
+      "quantity": 1,
+      "unitPrice": 180000,
+      "subtotal": 180000,
+      "discount": 0,
+      "deliveryFee": 0,
+      "total": 180000,
+      "notes": "",
+      "status": "Pending",
+      "paymentMethod": "Payment on Delivery"
+    },
+    {
+      "id": "MC-2699650",
+      "createdAt": "2026-11-07T12:55:12.294Z",
+      "fullName": "Chidinma Nwosu",
+      "phone": "08031234567",
+      "whatsapp": "08031234567",
+      "state": "Lagos",
+      "city": "Lagos",
+      "deliveryMethod": "Doorstep Delivery",
+      "doorstepFee": 0,
+      "deliveryAddress": "Block 4, Flat 2, 1004 Estate, Victoria Island",
+      "quantity": 2,
+      "unitPrice": 180000,
+      "subtotal": 360000,
+      "discount": 5000,
+      "deliveryFee": 0,
+      "total": 355000,
+      "notes": "",
+      "status": "Pending",
+      "paymentMethod": "Payment on Delivery"
+    },
+    {
+      "id": "MC-2641075",
+      "createdAt": "2026-11-07T12:48:44.506Z",
+      "fullName": "Test Customer",
+      "phone": "08012345678",
+      "whatsapp": "08012345678",
+      "state": "Lagos",
+      "city": "Lagos",
+      "deliveryMethod": "Doorstep Delivery",
+      "doorstepFee": 0,
+      "deliveryAddress": "12 Admiralty Way, Lekki Phase 1",
+      "quantity": 1,
+      "unitPrice": 180000,
+      "subtotal": 180000,
+      "discount": 0,
+      "deliveryFee": 0,
+      "total": 180000,
+      "notes": "",
+      "status": "Pending",
+      "paymentMethod": "Payment on Delivery"
+    }
+  ]
 }

@@ -15,10 +15,17 @@ const DB_FILE = path.join(DATA_DIR, 'db.json');
 app.use(express.json());
 
 // Serve static images directly from public/images, public/assets, and public
-app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
-app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
-app.use('/public', express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+const publicDir = path.join(__dirname, 'public');
+const assetsDir = path.join(publicDir, 'assets');
+const aistudioDir = path.join(assetsDir, 'aistudio');
+
+app.use('/assets/aistudio', express.static(aistudioDir));
+app.use('/public/assets/aistudio', express.static(aistudioDir));
+app.use('/assets', express.static(assetsDir));
+app.use('/public/assets', express.static(assetsDir));
+app.use('/images', express.static(path.join(publicDir, 'images')));
+app.use('/public', express.static(publicDir));
+app.use(express.static(publicDir));
 
 // Ensure data folder exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -84,8 +91,8 @@ const initialData = {
     sellingPrice: 135000,
     whatsappNumber: '+2349136827730',
     supportPhone: '09136827730',
-    supportEmail: 'orders@smartkitchensink.ng',
-    pickupOfficeAddress: 'Plot 14 Admiralty Way, Lekki Phase 1, Lagos, Nigeria',
+    supportEmail: 'info@moonlightluxuryhometech.shop',
+    pickupOfficeAddress: 'Block 17 Shop 5 Agric Odunade Market, Lagos, Nigeria',
     videoEmbedUrl: '', // Admin can set YouTube/Vimeo embed or video link
     videoTitle: 'Smart Piano Kitchen Sink Operational Showcase',
     videoDescription: 'Watch the 4-mode piano keys, flying rain waterfall flow, high-pressure glass rinser, and hydroelectric LED temperature display in action.',
@@ -181,9 +188,9 @@ const initialData = {
     },
     {
       id: 'img-multi-access-methods',
-      url: '/public/assets/aistudio/image_aa3a96c0.png',
-      title: '6-in-1 Multi-Access Smart Unlocking',
-      subtitle: 'Unlock via 3D Face, Biometric Fingerprint, Encrypted IC Card, Virtual Password, Mechanical Key, or Phone App'
+      url: '/assets/aistudio/image_42d449af.png',
+      title: 'Multiple Unlocking Methods & Smart Access',
+      subtitle: 'Multiple ways to unlock: Face Recognition, Palm Vein, Semiconductor Fingerprint, Password, NFC Card, Manual Key, Combination & Tuya App'
     },
     {
       id: 'img-parameters-anatomy',

@@ -7,7 +7,7 @@ export const Benefits: React.FC = () => {
       icon: KeyRound,
       title: 'Multiple Access Methods',
       tagline: 'Choose the way that’s most convenient for you',
-      description: 'Unlock seamlessly with 3D Face Recognition (<0.5s), 360° Semiconductor Fingerprint (0.3s), Anti-Peep Passcode, Encrypted RFID IC Card, Tuya App, or Concealed Mechanical Keys.'
+      description: 'Unlock seamlessly with Contactless Palm Vein Scanning (<0.5s), 3D Face Recognition, 360° Semiconductor Fingerprint (0.3s), Anti-Peep Passcode, Encrypted RFID IC Card, Tuya App, or Concealed Mechanical Keys.'
     },
     {
       icon: Smartphone,

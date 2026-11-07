@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img, video, iframe {
+  max-width: 100%;
+}
+
 @keyframes pulseGlowBlink {
   0%, 100% {
     box-shadow: 0 0 16px rgba(37, 99, 235, 0.75), 0 0 32px rgba(16, 185, 129, 0.55);
