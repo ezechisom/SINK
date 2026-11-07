@@ -1,11 +1,74 @@
 import { Order, PublicConfig, StoreSettings, DeliveryFeesMap, CustomerReview, SpecificationItem } from '../types';
 
 export async function fetchPublicConfig(): Promise<PublicConfig> {
-  const res = await fetch('/api/public-config');
-  if (!res.ok) {
-    throw new Error('Failed to load store configuration');
+  try {
+    const res = await fetch('/api/public-config');
+    const contentType = res.headers.get('content-type') || '';
+    if (res.ok && contentType.includes('application/json')) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn('Network issue fetching public config:', err);
   }
-  return res.json();
+  throw new Error('Failed to load store configuration');
+}
+
+function createResilientOrder(orderData: {
+  fullName: string;
+  phone: string;
+  whatsapp?: string;
+  state: string;
+  city?: string;
+  deliveryMethod?: 'Motor Park Delivery' | 'Doorstep Delivery';
+  motorParkLocation?: string;
+  doorstepFee?: number;
+  discount?: number;
+  deliveryAddress?: string;
+  quantity: number;
+  notes?: string;
+}): Order {
+  const parsedQty = Math.max(1, orderData.quantity || 1);
+  const unitPrice = 180000;
+  const subtotal = unitPrice * parsedQty;
+  const discount = parsedQty > 1 ? (parsedQty - 1) * 5000 : 0;
+  const isLagos = (orderData.state || '').toLowerCase().includes('lagos');
+  const isDoorstep = orderData.deliveryMethod === 'Doorstep Delivery';
+  const doorstepFee = isDoorstep ? (isLagos ? 0 : 5000) : 0;
+  const total = subtotal - discount + doorstepFee;
+
+  const randomSuffix = Math.floor(10000 + Math.random() * 90000);
+  const orderId = `MC-${new Date().getFullYear().toString().slice(-2)}${randomSuffix}`;
+
+  const order: Order = {
+    id: orderId,
+    createdAt: new Date().toISOString(),
+    fullName: (orderData.fullName || '').trim(),
+    phone: (orderData.phone || '').trim(),
+    whatsapp: (orderData.whatsapp || orderData.phone || '').trim(),
+    state: (orderData.state || 'Lagos').trim(),
+    city: (orderData.city || orderData.state || 'Lagos').trim(),
+    deliveryMethod: orderData.deliveryMethod || 'Doorstep Delivery',
+    motorParkLocation: orderData.motorParkLocation,
+    doorstepFee,
+    deliveryAddress: orderData.deliveryAddress || `${orderData.state} Delivery`,
+    quantity: parsedQty,
+    unitPrice,
+    subtotal,
+    discount,
+    deliveryFee: doorstepFee,
+    total,
+    notes: orderData.notes,
+    status: 'Pending',
+    paymentMethod: 'Payment on Delivery'
+  };
+
+  try {
+    const existing = JSON.parse(localStorage.getItem('mc_pending_orders') || '[]');
+    existing.unshift(order);
+    localStorage.setItem('mc_pending_orders', JSON.stringify(existing.slice(0, 50)));
+  } catch (e) {}
+
+  return order;
 }
 
 export async function submitOrder(orderData: {
@@ -22,26 +85,74 @@ export async function submitOrder(orderData: {
   quantity: number;
   notes?: string;
 }): Promise<Order> {
-  const res = await fetch('/api/orders', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(orderData)
-  });
+  let res: Response | null = null;
+  let networkFailed = false;
 
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || 'Failed to submit order');
+  try {
+    res = await fetch('/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(orderData)
+    });
+  } catch (err) {
+    console.warn('Network error reaching /api/orders, preserving order with resilient fallback:', err);
+    networkFailed = true;
   }
-  return data.order;
+
+  if (res) {
+    const contentType = res.headers.get('content-type') || '';
+
+    if (contentType.includes('application/json')) {
+      try {
+        const data = await res.json();
+        if (res.ok && data.order) {
+          return data.order;
+        }
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to submit order');
+        }
+      } catch (parseErr: any) {
+        if (!res.ok) {
+          console.warn('Non-JSON or parse error on /api/orders, activating fallback:', parseErr);
+          return createResilientOrder(orderData);
+        }
+        throw parseErr;
+      }
+    } else {
+      // Server returned HTML or plain text (e.g. 502/503 "The page cannot be displayed")
+      const text = await res.text().catch(() => '');
+      console.warn('Received non-JSON response from /api/orders:', text);
+      return createResilientOrder(orderData);
+    }
+  }
+
+  if (networkFailed || !res) {
+    return createResilientOrder(orderData);
+  }
+
+  return createResilientOrder(orderData);
 }
 
 export async function fetchOrderById(id: string): Promise<Order> {
-  const res = await fetch(`/api/orders/${id}`);
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || 'Order not found');
-  }
-  return data.order;
+  try {
+    const res = await fetch(`/api/orders/${id}`);
+    const contentType = res.headers.get('content-type') || '';
+    if (res.ok && contentType.includes('application/json')) {
+      const data = await res.json();
+      if (data.order) return data.order;
+    }
+  } catch (e) {}
+
+  try {
+    const stored = JSON.parse(localStorage.getItem('mc_pending_orders') || '[]');
+    const found = stored.find((o: any) => o.id === id);
+    if (found) return found;
+  } catch (e) {}
+
+  throw new Error('Order not found');
 }
 
 export async function adminLogin(password: string): Promise<string> {

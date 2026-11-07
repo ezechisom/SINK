@@ -337,7 +337,7 @@ async function sendMetaCapiGeneric({
       return acc;
     }, {});
 
-    const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket.remoteAddress || '127.0.0.1';
+    const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket?.remoteAddress || (req as any).ip || '127.0.0.1';
     const userAgent = (req.headers['user-agent'] as string) || 'Mozilla/5.0';
     const eventSourceUrl = sourceUrlOverride || (req.headers.referer as string) || (req.headers.origin as string) || 'https://ais-pre-esmhdnz2qbrgb3hajpuwbr-656280234555.europe-west1.run.app';
 
@@ -439,7 +439,7 @@ async function sendMetaConversionsApi(order: any, req: Request) {
       return acc;
     }, {});
 
-    const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket.remoteAddress || '';
+    const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket?.remoteAddress || (req as any).ip || '';
     const userAgent = (req.headers['user-agent'] as string) || '';
     const eventSourceUrl = (req.headers.referer as string) || (req.headers.origin as string) || 'https://ais-pre-esmhdnz2qbrgb3hajpuwbr-656280234555.europe-west1.run.app';
 
@@ -566,7 +566,7 @@ async function sendTikTokEventsApi(order: any, req: express.Request) {
     const accessToken = db.settings?.pixels?.tikTokAccessToken || process.env.TIKTOK_ACCESS_TOKEN;
     const testEventCode = db.settings?.pixels?.tikTokTestEventCode || process.env.TIKTOK_TEST_EVENT_CODE;
 
-    const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket.remoteAddress || '127.0.0.1';
+    const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket?.remoteAddress || (req as any).ip || '127.0.0.1';
     const userAgent = (req.headers['user-agent'] as string) || 'Mozilla/5.0';
     const eventSourceUrl = (req.headers['referer'] as string) || 'https://ais-pre-esmhdnz2qbrgb3hajpuwbr-656280234555.europe-west1.run.app/';
 
@@ -658,106 +658,123 @@ app.get('/api/public-config', (req, res) => {
 
 // 2. Submit New Order
 app.post('/api/orders', (req, res) => {
-  const {
-    fullName,
-    phone,
-    whatsapp,
-    state,
-    city,
-    deliveryMethod,
-    motorParkLocation,
-    deliveryAddress,
-    quantity,
-    notes
-  } = req.body;
+  try {
+    const body = req.body || {};
+    const fullName = String(body.fullName || body.name || '').trim();
+    const phone = String(body.phone || body.phoneNumber || body.tel || '').trim();
+    const whatsapp = String(body.whatsapp || body.phone || body.phoneNumber || '').trim();
+    const state = String(body.state || '').trim();
+    const city = String(body.city || state).trim();
+    const deliveryMethod = body.deliveryMethod || 'Doorstep Delivery';
+    const motorParkLocation = body.motorParkLocation ? String(body.motorParkLocation).trim() : undefined;
+    const deliveryAddress = String(body.deliveryAddress || body.address || '').trim();
+    const quantity = body.quantity;
+    const notes = String(body.notes || '').trim();
 
-  const isMotorPark = deliveryMethod === 'Motor Park Delivery';
-  const effectiveAddress = isMotorPark
-    ? (deliveryAddress && deliveryAddress.trim().length > 0
-        ? deliveryAddress.trim()
-        : motorParkLocation
-        ? `${motorParkLocation} Motor Park Terminal, ${state}`
-        : `Central Commercial Motor Park Terminal, ${state}`)
-    : (deliveryAddress ? deliveryAddress.trim() : '');
+    if (!fullName || !phone || !state) {
+      return res.status(400).json({ success: false, error: 'Please provide all required delivery details (Name, Phone, State)' });
+    }
 
-  if (!fullName || !phone || !state) {
-    return res.status(400).json({ error: 'Please provide all required delivery details (Name, Phone, State)' });
+    const isMotorPark = deliveryMethod === 'Motor Park Delivery';
+    const effectiveAddress = isMotorPark
+      ? (deliveryAddress.length > 0
+          ? deliveryAddress
+          : motorParkLocation
+          ? `${motorParkLocation} Motor Park Terminal, ${state}`
+          : `Central Commercial Motor Park Terminal, ${state}`)
+      : deliveryAddress;
+
+    if (!isMotorPark && !effectiveAddress) {
+      return res.status(400).json({ success: false, error: 'Please provide your doorstep delivery address' });
+    }
+
+    const parsedQty = Math.max(1, parseInt(quantity, 10) || 1);
+    const db = readDb() || {};
+    const settings = db.settings || {};
+    const unitPrice = settings.sellingPrice || 180000;
+    const subtotal = unitPrice * parsedQty;
+
+    let discount = 0;
+    if (parsedQty > 1) {
+      discount = (parsedQty - 1) * 5000;
+    }
+
+    const isLagos = state.toLowerCase().includes('lagos');
+    const isDoorstep = deliveryMethod === 'Doorstep Delivery';
+    const doorstepFee = isDoorstep ? (isLagos ? 0 : 5000) : 0;
+    const totalDeliveryFee = doorstepFee;
+    const total = subtotal - discount + totalDeliveryFee;
+
+    const randomSuffix = Math.floor(10000 + Math.random() * 90000);
+    const orderId = `MC-${new Date().getFullYear().toString().slice(-2)}${randomSuffix}`;
+
+    const newOrder = {
+      id: orderId,
+      createdAt: new Date().toISOString(),
+      fullName,
+      phone,
+      whatsapp,
+      state,
+      city,
+      deliveryMethod,
+      motorParkLocation,
+      doorstepFee,
+      deliveryAddress: effectiveAddress,
+      quantity: parsedQty,
+      unitPrice,
+      subtotal,
+      discount,
+      deliveryFee: totalDeliveryFee,
+      total,
+      notes,
+      status: 'Pending',
+      paymentMethod: 'Payment on Delivery'
+    };
+
+    if (!Array.isArray(db.orders)) {
+      db.orders = [];
+    }
+    db.orders.unshift(newOrder);
+    writeDb(db);
+
+    // Non-blocking background notifications with safe error isolation
+    setImmediate(() => {
+      try {
+        sendMetaConversionsApi(newOrder, req).catch((err) => {
+          console.error('[Meta CAPI Background Error]:', err);
+        });
+      } catch (e) {
+        console.error('[Meta CAPI Trigger Error]:', e);
+      }
+
+      try {
+        sendTikTokEventsApi(newOrder, req).catch((err) => {
+          console.error('[TikTok Events API Background Error]:', err);
+        });
+      } catch (e) {
+        console.error('[TikTok Events API Trigger Error]:', e);
+      }
+
+      try {
+        sendFormspreeNotification(newOrder).catch((err) => {
+          console.error('[Formspree Background Error]:', err);
+        });
+      } catch (e) {
+        console.error('[Formspree Trigger Error]:', e);
+      }
+    });
+
+    return res.status(201).json({
+      success: true,
+      order: newOrder
+    });
+  } catch (err: any) {
+    console.error('[Order Creation Exception]:', err);
+    return res.status(500).json({
+      success: false,
+      error: err.message || 'An unexpected error occurred while saving your order'
+    });
   }
-
-  if (!isMotorPark && !effectiveAddress) {
-    return res.status(400).json({ error: 'Please provide your doorstep delivery address' });
-  }
-
-  const parsedQty = Math.max(1, parseInt(quantity, 10) || 1);
-  const db = readDb();
-  const unitPrice = db.settings.sellingPrice || 180000;
-  const subtotal = unitPrice * parsedQty;
-
-  // User request: "THE DISCOUNT FOR MULTIPLE ITEM IS 5K NOT 15K"
-  let discount = 0;
-  if (parsedQty > 1) {
-    discount = (parsedQty - 1) * 5000;
-  }
-
-  // User request: Base state delivery removed (FREE nationwide!)
-  const baseDeliveryFee = 0;
-
-  // User request: Extra 5k for home delivery is NOT applicable to Lagos
-  const isLagos = (state || '').trim().toLowerCase().includes('lagos');
-  const isDoorstep = deliveryMethod === 'Doorstep Delivery';
-  const doorstepFee = isDoorstep ? (isLagos ? 0 : 5000) : 0;
-  const totalDeliveryFee = doorstepFee;
-  const total = subtotal - discount + totalDeliveryFee;
-
-  // Generate unique order reference (e.g. MC-26941)
-  const randomSuffix = Math.floor(10000 + Math.random() * 90000);
-  const orderId = `MC-${new Date().getFullYear().toString().slice(-2)}${randomSuffix}`;
-
-  const newOrder = {
-    id: orderId,
-    createdAt: new Date().toISOString(),
-    fullName: fullName.trim(),
-    phone: phone.trim(),
-    whatsapp: (whatsapp || phone).trim(),
-    state: state.trim(),
-    city: (city || state).trim(),
-    deliveryMethod: deliveryMethod || 'Motor Park Delivery',
-    motorParkLocation: motorParkLocation ? motorParkLocation.trim() : undefined,
-    doorstepFee,
-    deliveryAddress: effectiveAddress,
-    quantity: parsedQty,
-    unitPrice,
-    subtotal,
-    discount,
-    deliveryFee: totalDeliveryFee,
-    total,
-    notes: notes ? notes.trim() : '',
-    status: 'Pending',
-    paymentMethod: 'Payment on Delivery'
-  };
-
-  db.orders.unshift(newOrder);
-  writeDb(db);
-
-  // Trigger Meta Conversions API (CAPI) server-side event
-  sendMetaConversionsApi(newOrder, req).catch((err) => {
-    console.error('Meta CAPI error on order creation:', err);
-  });
-
-  // Trigger TikTok Events API server-side event
-  sendTikTokEventsApi(newOrder, req).catch((err) => {
-    console.error('TikTok Events API error on order creation:', err);
-  });
-
-  // Trigger Formspree email notification to seller
-  sendFormspreeNotification(newOrder).catch((err) => {
-    console.error('Formspree notification error on order creation:', err);
-  });
-
-  res.status(201).json({
-    success: true,
-    order: newOrder
-  });
 });
 
 // Formspree Test Endpoint
@@ -850,7 +867,7 @@ app.post('/api/tiktok/test', async (req, res) => {
   const testEventCode = req.body.testEventCode || db.settings?.pixels?.tikTokTestEventCode || process.env.TIKTOK_TEST_EVENT_CODE;
   const accessToken = req.body.accessToken || db.settings?.pixels?.tikTokAccessToken || process.env.TIKTOK_ACCESS_TOKEN;
 
-  const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket.remoteAddress || '127.0.0.1';
+  const clientIp = ((req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()) || req.socket?.remoteAddress || (req as any).ip || '127.0.0.1';
   const userAgent = (req.headers['user-agent'] as string) || 'Mozilla/5.0';
 
   const testPayload: any = {
@@ -1127,6 +1144,23 @@ app.post('/api/admin/media', requireAdmin, (req, res) => {
   if (videoDescription !== undefined) db.settings.videoDescription = videoDescription;
   writeDb(db);
   res.json({ success: true, galleryImages: db.galleryImages, settings: db.settings });
+});
+
+// 404 handler for API routes to guarantee JSON response
+app.all('/api/*', (req, res) => {
+  res.status(404).json({ success: false, error: `API route ${req.method} ${req.path} not found` });
+});
+
+// Global Express error handler to guarantee all API errors return JSON, never HTML
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error('[Global Express Error]:', err);
+  if (req.path.startsWith('/api/')) {
+    return res.status(err.status || 500).json({
+      success: false,
+      error: err.message || 'Internal server error occurred'
+    });
+  }
+  next(err);
 });
 
 // ----------------------------------------------------
