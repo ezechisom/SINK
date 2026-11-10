@@ -109,6 +109,13 @@ export async function submitOrder(orderData: {
       try {
         const data = await res.json();
         if (res.ok && data.order) {
+          try {
+            const existing = JSON.parse(localStorage.getItem('mc_pending_orders') || '[]');
+            const filtered = existing.filter((o: any) => o.id !== data.order.id);
+            filtered.unshift(data.order);
+            localStorage.setItem('mc_pending_orders', JSON.stringify(filtered.slice(0, 50)));
+            localStorage.setItem('mc_last_order', JSON.stringify(data.order));
+          } catch (e) {}
           return data.order;
         }
         if (!res.ok) {

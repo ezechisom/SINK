@@ -1,13 +1,14 @@
 import React from 'react';
-import { ShoppingBag, Lock, Waves, HelpCircle, CheckCircle2, Sparkles } from 'lucide-react';
+import { ShoppingBag, Lock, Waves, HelpCircle, CheckCircle2, Sparkles, Package } from 'lucide-react';
 
 interface HeaderProps {
   price: number;
   onOrderClick: () => void;
   onAdminClick: () => void;
+  onTrackClick?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ price, onOrderClick, onAdminClick }) => {
+export const Header: React.FC<HeaderProps> = ({ price, onOrderClick, onAdminClick, onTrackClick }) => {
   return (
     <div className="sticky top-0 z-40 w-full">
       {/* Top Announcement Bar with Green & Blue Highlights */}
@@ -24,6 +25,14 @@ export const Header: React.FC<HeaderProps> = ({ price, onOrderClick, onAdminClic
           </div>
 
           <div className="flex items-center gap-3 shrink-0 text-[11px]">
+            <a
+              href="#tracking"
+              onClick={onTrackClick}
+              className="flex items-center gap-1 text-emerald-200 hover:text-white transition-colors underline underline-offset-2 whitespace-nowrap font-bold"
+            >
+              <Package className="w-3.5 h-3.5 text-emerald-300" />
+              <span>Track Order</span>
+            </a>
             <a
               href="#faq"
               className="flex items-center gap-1 text-white hover:text-emerald-200 transition-colors underline underline-offset-2 whitespace-nowrap"
@@ -74,6 +83,14 @@ export const Header: React.FC<HeaderProps> = ({ price, onOrderClick, onAdminClic
               Specifications
             </a>
             <a
+              href="#tracking"
+              onClick={onTrackClick}
+              className="flex items-center gap-1.5 text-slate-700 hover:text-blue-600 font-bold transition-colors whitespace-nowrap shrink-0"
+            >
+              <Package className="w-4 h-4 text-blue-600" />
+              <span>Track Order</span>
+            </a>
+            <a
               href="#faq"
               className="flex items-center gap-1.5 text-blue-700 hover:text-emerald-600 font-bold transition-colors whitespace-nowrap shrink-0"
             >
@@ -82,8 +99,19 @@ export const Header: React.FC<HeaderProps> = ({ price, onOrderClick, onAdminClic
             </a>
           </nav>
 
-          {/* Zone 3: FAQ Link + Glowing Blinking ORDER NOW Button */}
-          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+          {/* Zone 3: Track Order + FAQ Link + Glowing Blinking ORDER NOW Button */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            {/* Quick Track Order Button */}
+            <a
+              href="#tracking"
+              onClick={onTrackClick}
+              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200 text-xs font-bold transition-colors cursor-pointer"
+              title="Track your order status"
+            >
+              <Package className="w-3.5 h-3.5 text-blue-600" />
+              <span>Track</span>
+            </a>
+
             {/* Direct FAQ Link at top */}
             <a
               href="#faq"

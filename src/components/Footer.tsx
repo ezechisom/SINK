@@ -5,9 +5,10 @@ import { StoreSettings } from '../types';
 interface FooterProps {
   settings: StoreSettings;
   onAdminClick: () => void;
+  onTrackClick?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ settings, onAdminClick }) => {
+export const Footer: React.FC<FooterProps> = ({ settings, onAdminClick, onTrackClick }) => {
   return (
     <footer className="bg-[#0a192f] text-slate-300 py-12 sm:py-16 border-t border-blue-900/60 pb-24 sm:pb-16 text-left">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,6 +70,11 @@ export const Footer: React.FC<FooterProps> = ({ settings, onAdminClick }) => {
               <li>
                 <a href="#benefits" className="hover:text-white transition-colors">
                   Key Benefits
+                </a>
+              </li>
+              <li>
+                <a href="#tracking" onClick={onTrackClick} className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1.5">
+                  <span>Track Your Order</span>
                 </a>
               </li>
               <li>

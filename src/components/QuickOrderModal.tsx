@@ -240,7 +240,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
           doorstepSurcharge: doorstepFee ? `₦${doorstepFee.toLocaleString()}` : '₦0 (FREE in Lagos / Motor Park)',
           totalPayableOnDelivery: `₦${order.total.toLocaleString()}`,
           customerNotes: notes.trim() || 'None',
-          orderSource: '45s Quick Order Popup',
+          orderSource: 'Quick Order Popup',
           orderTimestamp: new Date().toLocaleString()
         })
       }).catch((e) => console.log('Client Formspree dispatch:', e));
@@ -398,7 +398,13 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} onFocus={handleInteraction} className="space-y-4">
+          <form
+            onSubmit={handleSubmit}
+            onFocus={handleInteraction}
+            onClick={handleInteraction}
+            onKeyDown={handleInteraction}
+            className="space-y-4"
+          >
             <div className="text-left">
               <h3 id="quick-order-title" className="font-['Outfit'] text-lg sm:text-xl font-extrabold text-white flex items-center justify-between">
                 <span>A-01 Deadbolt Smart Lock</span>

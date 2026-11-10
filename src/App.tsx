@@ -19,6 +19,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { CookieBanner } from './components/CookieBanner';
 import { QuickOrderModal } from './components/QuickOrderModal';
 import { CountdownTimer } from './components/CountdownTimer';
+import { OrderTracking } from './components/OrderTracking';
 import { resolveImageUrl } from './utils/imageHelper';
 
 // Fallback initial config matching the required ₦180,000 price & reference specs
@@ -232,30 +233,109 @@ export default function App() {
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
   const [hasOrdered, setHasOrdered] = useState(false);
   const [isFillingMainForm, setIsFillingMainForm] = useState(false);
-  const isFillingMainFormRef = useRef(false);
+  const [activeTrackingOrderId, setActiveTrackingOrderId] = useState<string>('');
+  const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
 
-  // Keep ref up to date synchronously without restarting timers
+  const hasOrderedRef = useRef(false);
+  const isAdminOpenRef = useRef(false);
+  const isFillingMainFormRef = useRef(false);
+  const hasStartedScrollingRef = useRef(false);
+  const initialScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const retriggerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    hasOrderedRef.current = hasOrdered;
+    if (hasOrdered) {
+      if (initialScrollTimeoutRef.current) clearTimeout(initialScrollTimeoutRef.current);
+      if (retriggerTimeoutRef.current) clearTimeout(retriggerTimeoutRef.current);
+      setIsQuickOrderOpen(false);
+    }
+  }, [hasOrdered]);
+
+  useEffect(() => {
+    isAdminOpenRef.current = isAdminOpen;
+  }, [isAdminOpen]);
+
   useEffect(() => {
     isFillingMainFormRef.current = isFillingMainForm;
+    if (isFillingMainForm) {
+      setIsQuickOrderOpen(false);
+    }
   }, [isFillingMainForm]);
 
-    // User request: Quick Order Form that pops up every 60 seconds a customer stays on the site
-    // User instruction: "DONT ALLOW THE QUICK POP UP FORM TO POP UP WHEN SOMEONE IS ALREADY FILLING THE FORM"
-    useEffect(() => {
-      if (hasOrdered) return;
+  // Function to schedule a re-popup after specified delay (default 100 seconds)
+  const scheduleRetrigger = (delayMs = 100000) => {
+    if (retriggerTimeoutRef.current) {
+      clearTimeout(retriggerTimeoutRef.current);
+      retriggerTimeoutRef.current = null;
+    }
 
-      const interval = setInterval(() => {
-        setIsQuickOrderOpen((prev) => {
-          // NEVER show popup if customer has already ordered, admin is open, OR customer is currently filling the main form
-          if (!prev && !hasOrdered && !isAdminOpen && !isFillingMainFormRef.current) {
-            return true;
-          }
-          return prev;
-        });
+    if (hasOrderedRef.current) return;
+
+    retriggerTimeoutRef.current = setTimeout(() => {
+      if (hasOrderedRef.current) return;
+
+      // Never show popup if customer is currently filling the main form or admin is open
+      if (isFillingMainFormRef.current || isAdminOpenRef.current) {
+        scheduleRetrigger(15000);
+        return;
+      }
+
+      setIsQuickOrderOpen(true);
+    }, delayMs);
+  };
+
+  // User instruction:
+  // "LET THE POP UP FORM POP UP ONLY AFTER 60SECS OF THE PERSON SCROLLING ON THE WEBSITE
+  // AND GOES OUT AFTER 15SECS IF THE PERSON DOESNT FILL THE FORM
+  // THEN IT WILL POP UP AGAIN AFTER 100 SECONDS IF THE PERSON IS STILL ON THE SITE AND HAVENT PLACE AN ORDER"
+  useEffect(() => {
+    if (hasOrdered) return;
+
+    const handleFirstScroll = () => {
+      if (hasStartedScrollingRef.current) return;
+      hasStartedScrollingRef.current = true;
+
+      // Starts 60-second timer from the moment person starts scrolling on the website
+      initialScrollTimeoutRef.current = setTimeout(() => {
+        if (!hasOrderedRef.current && !isAdminOpenRef.current && !isFillingMainFormRef.current) {
+          setIsQuickOrderOpen(true);
+        } else if (!hasOrderedRef.current) {
+          // If customer was filling main form right at the 60s mark, schedule 100s retrigger
+          scheduleRetrigger(100000);
+        }
       }, 60000);
+    };
 
-      return () => clearInterval(interval);
-    }, [hasOrdered, isAdminOpen]);
+    window.addEventListener('scroll', handleFirstScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleFirstScroll);
+      if (initialScrollTimeoutRef.current) clearTimeout(initialScrollTimeoutRef.current);
+      if (retriggerTimeoutRef.current) clearTimeout(retriggerTimeoutRef.current);
+    };
+  }, [hasOrdered]);
+
+  const handleQuickOrderClose = () => {
+    setIsQuickOrderOpen(false);
+    // User instruction: "THEN IT WILL POP UP AGAIN AFTER 100 SECONDS IF THE PERSON IS STILL ON THE SITE AND HAVENT PLACE AN ORDER"
+    if (!hasOrderedRef.current) {
+      scheduleRetrigger(100000);
+    }
+  };
+
+  // Smooth scroll or modal open for order tracking
+  const handleOpenTracking = (orderId?: string) => {
+    if (orderId) {
+      setActiveTrackingOrderId(orderId);
+    }
+    const el = document.getElementById('tracking');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      setIsTrackingModalOpen(true);
+    }
+  };
 
   const loadConfig = async () => {
     try {
@@ -313,6 +393,7 @@ export default function App() {
         price={sellingPrice}
         onOrderClick={scrollToOrderForm}
         onAdminClick={() => setIsAdminOpen(true)}
+        onTrackClick={() => handleOpenTracking()}
       />
 
       {/* Main Content */}
@@ -369,38 +450,49 @@ export default function App() {
           }}
         />
 
-        {/* 9. FAQ & Trust Section */}
+        {/* 9. Order Tracking Feature (Local Storage Lookup & Real-Time Status Updates) */}
+        <OrderTracking
+          initialOrderId={activeTrackingOrderId}
+          onOrderClick={scrollToOrderForm}
+        />
+
+        {/* 10. FAQ & Trust Section */}
         <FaqAndTrust settings={config.settings} />
       </main>
 
-      {/* 10. Footer */}
+      {/* 11. Footer */}
       <Footer
         settings={config.settings}
         onAdminClick={() => setIsAdminOpen(true)}
+        onTrackClick={() => handleOpenTracking()}
       />
 
-      {/* 11. Floating Verified Reviews Badge */}
+      {/* 12. Floating Verified Reviews Badge */}
       <FloatingReview reviews={config.reviews} />
 
-      {/* 12. Mobile Sticky Purchase Bar (complying with <= 15% viewport height) */}
+      {/* 13. Mobile Sticky Purchase Bar (complying with <= 15% viewport height) */}
       <MobileStickyBar
         price={sellingPrice}
         onOrderClick={scrollToOrderForm}
       />
 
-      {/* 13. Order Confirmation Modal */}
+      {/* 14. Order Confirmation Modal */}
       {confirmedOrder && (
         <OrderConfirmationModal
           order={confirmedOrder}
           whatsappNumber={config.settings.whatsappNumber}
           onClose={() => setConfirmedOrder(null)}
+          onTrackOrder={(orderId) => {
+            setActiveTrackingOrderId(orderId);
+            handleOpenTracking(orderId);
+          }}
         />
       )}
 
-      {/* 14. Quick Order Modal (pops up every 60s, auto-closes in 15s if not filled, with photo slideshow) */}
+      {/* 15. Quick Order Modal (pops up only after 60s of scrolling, auto-closes in 15s if not filled, re-pops up after 100s) */}
       <QuickOrderModal
         isOpen={isQuickOrderOpen}
-        onClose={() => setIsQuickOrderOpen(false)}
+        onClose={handleQuickOrderClose}
         price={sellingPrice}
         nigerianStates={nigerianStates}
         deliveryFees={config.deliveryFees}
@@ -408,12 +500,15 @@ export default function App() {
         images={config.galleryImages}
         onOrderSuccess={(order) => {
           setHasOrdered(true);
+          hasOrderedRef.current = true;
+          if (retriggerTimeoutRef.current) clearTimeout(retriggerTimeoutRef.current);
+          if (initialScrollTimeoutRef.current) clearTimeout(initialScrollTimeoutRef.current);
           setConfirmedOrder(order);
           setIsQuickOrderOpen(false);
         }}
       />
 
-      {/* 15. Secure Admin Dashboard */}
+      {/* 16. Secure Admin Dashboard */}
       <AdminDashboard
         isOpen={isAdminOpen}
         onClose={() => setIsAdminOpen(false)}
@@ -421,8 +516,21 @@ export default function App() {
         onConfigUpdated={loadConfig}
       />
 
-      {/* 16. Cookie Consent Notice */}
+      {/* 17. Cookie Consent Notice */}
       <CookieBanner />
+
+      {/* 18. Interactive Order Tracking Modal */}
+      {isTrackingModalOpen && (
+        <OrderTracking
+          isOpenAsModal={true}
+          initialOrderId={activeTrackingOrderId}
+          onCloseModal={() => setIsTrackingModalOpen(false)}
+          onOrderClick={() => {
+            setIsTrackingModalOpen(false);
+            scrollToOrderForm();
+          }}
+        />
+      )}
     </div>
   );
 }

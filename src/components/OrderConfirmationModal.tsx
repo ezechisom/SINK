@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, MessageCircle, X, Printer, MapPin, Building, Home, Tag } from 'lucide-react';
+import { CheckCircle2, MessageCircle, X, Printer, MapPin, Building, Home, Tag, Package, Truck } from 'lucide-react';
 import { Order } from '../types';
 import { isLagosState } from '../utils/delivery';
 
@@ -7,12 +7,14 @@ interface OrderConfirmationModalProps {
   order: Order;
   whatsappNumber: string;
   onClose: () => void;
+  onTrackOrder?: (orderId: string) => void;
 }
 
 export const OrderConfirmationModal: React.FC<OrderConfirmationModalProps> = ({
   order,
   whatsappNumber,
-  onClose
+  onClose,
+  onTrackOrder
 }) => {
   // Clean phone number for WhatsApp link
   const cleanPhone = whatsappNumber.replace(/[^0-9]/g, '');
@@ -181,6 +183,20 @@ export const OrderConfirmationModal: React.FC<OrderConfirmationModalProps> = ({
             <MessageCircle className="w-5 h-5 fill-current" />
             <span>CONFIRM ON WHATSAPP NOW</span>
           </a>
+
+          {/* Track Live Status Button */}
+          {onTrackOrder && (
+            <button
+              onClick={() => {
+                onClose();
+                onTrackOrder(order.id);
+              }}
+              className="flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold transition-all cursor-pointer"
+            >
+              <Package className="w-4 h-4 text-blue-600" />
+              <span>Track Live Status</span>
+            </button>
+          )}
 
           {/* Print/Save Receipt */}
           <button
